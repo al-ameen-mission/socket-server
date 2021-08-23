@@ -1,0 +1,7 @@
+{% extends 'layout.twig' %}
+
+{% block body %}
+  <h1 class="uk-text-bold">{{message}}</h1>
+  <h2 class="uk-text-bold">{{error.status}}</h2>
+  <pre class="uk-text-small" style="font-family: 'Courier New', Courier, monospace">{{error.stack}}</pre>
+{% endblock %}

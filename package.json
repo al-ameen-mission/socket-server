@@ -1,0 +1,26 @@
+{
+  "name": "alameen_server",
+  "version": "1.0.1",
+  "private": true,
+  "scripts": {
+    "start": "NODE_ENV=production  NODE_OPTIONS=--max-old-space-size=8192 node bin/www",
+    "dev": "NODE_ENV=development  NODE_OPTIONS=--max-old-space-size=8192 node bin/www"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "dotenv": "^10.0.0",
+    "dynamic-queue": "^0.2.1",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "https": "^1.0.0",
+    "less-middleware": "~2.2.1",
+    "moment": "^2.29.1",
+    "morgan": "~1.9.1",
+    "mysql": "github:mysqljs/mysql",
+    "rollbar": "^2.24.0",
+    "sequelize": "^6.6.5",
+    "socket.io": "^2.3.0",
+    "twig": "~0.10.3"
+  }
+}

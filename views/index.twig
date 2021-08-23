@@ -1,0 +1,147 @@
+{% extends 'layout.twig' %}
+
+{% block body %}
+
+  <div class="uk-container uk-margin-auto ">
+    <h3>Examination Test Panel</h3>
+    <div class="uk-card-small uk-card-default uk-margin">
+      <div class="uk-card-body">
+
+        <div class="uk-form-horizontal">
+          <div class="uk-margin">
+            <label class="uk-form-label">Student ID</label>
+            <div class="uk-form-controls">
+              <input type="text" id="_studentId" class="uk-input uk-form-small" value="1" placeholder="Student ID">
+            </div>
+          </div>
+          <div class="uk-margin">
+            <label class="uk-form-label">History ID</label>
+            <div class="uk-form-controls">
+              <input type="text" id="_historyId" class="uk-input uk-form-small" value="1" placeholder="History ID">
+
+            </div>
+          </div>
+          <div class="uk-margin">
+            <label class="uk-form-label">Exam ID</label>
+            <div class="uk-form-controls">
+              <input type="text" id="_examId" class="uk-input uk-form-small" value="1" placeholder="Exam Group ID">
+            </div>
+          </div>
+          <div class="uk-margin">
+            <label class="uk-form-label">Exam Group ID</label>
+            <div class="uk-form-controls">
+              <input type="text" id="_exam_group_id" class="uk-input uk-form-small" value="1" placeholder="Exam Group ID">
+            </div>
+          </div>
+
+          <div class="uk-margin">
+            <label class="uk-form-label">Exam Details ID</label>
+            <div class="uk-form-controls">
+              <input type="text" id="_examdetailsId" class="uk-input uk-form-small" value="1" placeholder="Exam Group ID">
+            </div>
+          </div>
+
+          <div class="uk-margin">
+            <label class="uk-form-label">Question ID</label>
+            <div class="uk-form-controls">
+              <input type="text" id="_questionId" class="uk-input uk-form-small" value="1" placeholder="Exam Group ID">
+            </div>
+          </div>
+
+          <div class="uk-margin">
+            <label class="uk-form-label">Answer</label>
+            <div class="uk-form-controls">
+              <input type="text" id="_answer" class="uk-input uk-form-small" value="1" placeholder="Exam Group ID">
+            </div>
+          </div>
+        </div>
+        <div class="uk-margin" >
+          <button
+                  onclick="save_text_answer()"
+                  class="uk-button uk-button-secondary uk-button-small">SEND ANSWER</button>
+        </div>
+      </div>
+    </div>
+    <div class="uk-margin">
+      <div class="uk-card uk-card-default uk-card-small">
+        <div class="uk-card-header">
+          <h5>Log</h5>
+        </div>
+        <div class="uk-card-body  " >
+
+          <div id="console_log" class="uk-height-medium uk-overflow-auto">
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <script>
+
+
+    handle_log("trying to connecting socket server.", "out");
+    let socket = io("{{ SOCKET_IO_URL }}",{
+      path: "/io",
+    });
+
+
+    socket.on("log",(req)=>{
+      handle_log(req);
+    })
+
+    function get_random(min=1111, max=9999){
+      return Math.floor((Math.random() * max) + min);
+    }
+
+    function save_text_answer(){
+      socket.emit("answer_by_student", {
+        examId    : document.querySelector("#_examId").value,
+        exam_group_id  : document.querySelector("#_exam_group_id").value,
+        examdetailsId:document.querySelector("#_examdetailsId").value,
+        studentId : document.querySelector("#_studentId").value,
+        questionId:document.querySelector("#_questionId").value,
+        historyId:document.querySelector("#_historyId").value,
+        answer : document.querySelector("#_answer").value,
+      });
+      handle_log("student answer sent", "out");
+    }
+
+    function save_random_text_answer(){
+      setInterval(function (){
+        socket.emit("answer_by_student", {
+          examId    : get_random(),
+          exam_group_id  : get_random(),
+          examdetailsId: get_random(),
+          studentId : get_random(),
+          questionId: get_random(),
+          historyId: get_random(),
+          answer : get_random(),
+        },100);
+      })
+      handle_log("student answer sent", "out");
+    }
+    //save_random_text_answer();
+
+
+    function handle_log(req, typ='in'){
+      let now = new Date().toLocaleString().replace(",","").replace(/:.. /," ");
+
+      let con = '';
+      if(typ==="in"){
+        con = `<p class="uk-margin-remove" style="color: black; padding-bottom: 3px">
+            <small>[${now}] <span class="uk-text-success">${req}</span></small>
+        </p>`;
+      } else {
+        con = `<p class="uk-margin-remove" style="color: black; padding-bottom: 3px">
+            <small>[${now}] <span class="uk-text-warning">${req}</span></small>
+        </p>`;
+      }
+
+      document.querySelector("#console_log").innerHTML += con;
+      document.querySelector("#console_log").scrollTop = document.querySelector("#console_log").scrollHeight;
+    }
+
+  </script>
+
+{% endblock %}

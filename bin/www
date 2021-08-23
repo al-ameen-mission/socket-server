@@ -1,0 +1,63 @@
+/**
+ * Module dependencies.
+ */
+let app = require('../app');
+let {logError, logDebug, logInfo, rollbar} = require("../lib/log");
+let socket = require('socket.io');
+let fs = require("fs");
+//Environment variable Setup
+if(process.env.NODE_ENV==="development"){
+  require('dotenv').config({ path: __dirname+'/./../.env.dev' });
+} else {
+  require('dotenv').config();
+}
+
+//Environment variable setup end
+let answer_directory_path = process.env.ANSWER_PATH;
+
+/**
+ * Get port from environment and store in Express.
+ */
+console.log(process.env.PORT);
+let port = process.env.PORT;
+
+/**
+ * Create HTTP server.
+ */
+let server = null;
+if(process.env.ACTIVATE_SSL==1){
+  let https = require('https');
+  const credentials = {
+    key: fs.readFileSync(process.env.SSL_PRIVATE_KEY_PATH, 'utf8'),
+    cert: fs.readFileSync(process.env.SSL_CERTIFICATE_PATH, 'utf8'),
+    ca: fs.readFileSync(process.env.SSL_CA_PATH, 'utf8')
+  }
+  server = https.createServer(credentials, app);
+} else {
+  let http = require('http');
+  server = http.createServer(app);
+}
+
+
+/**
+ * Socket io
+ */
+let InitSocketIO = require("../lib/sock");
+InitSocketIO(server);
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+server.listen(port);
+server.on('error', logError);
+server.on('listening', onListening);
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  let adder = server.address();
+  let bind = typeof adder === 'string'
+      ? 'pipe ' + adder
+      : 'port ' + adder.port;
+  logInfo('Listening on ' + bind);
+}
