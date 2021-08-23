@@ -12,13 +12,11 @@ if(process.env.NODE_ENV==="development"){
   require('dotenv').config();
 }
 
-//Environment variable setup end
-let answer_directory_path = process.env.ANSWER_PATH;
-
+//mysql
+const models = require('./../models');
 /**
  * Get port from environment and store in Express.
  */
-console.log(process.env.PORT);
 let port = process.env.PORT;
 
 /**
