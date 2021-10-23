@@ -1,19 +1,19 @@
 /**
  * Module dependencies.
  */
-let app = require('../app');
-let {logError, logDebug, logInfo, rollbar} = require("../lib/log");
-let socket = require('socket.io');
 let fs = require("fs");
+let path = require("path");
+
 //Environment variable Setup
 if(process.env.NODE_ENV==="development"){
-  require('dotenv').config({ path: __dirname+'/./../.env.dev' });
+  require('dotenv').config({ path: path.resolve(__dirname+"/../.env.devlopment") });
 } else {
   require('dotenv').config();
 }
 
+let {logError, logDebug, logInfo, rollbar} = require("../lib/log");
 //mysql
-const models = require('./../models');
+//const models = require('./../models');
 /**
  * Get port from environment and store in Express.
  */
@@ -23,6 +23,7 @@ let port = process.env.PORT;
  * Create HTTP server.
  */
 let server = null;
+let app = require('../app');
 if(process.env.ACTIVATE_SSL==1){
   let https = require('https');
   const credentials = {
@@ -41,6 +42,8 @@ if(process.env.ACTIVATE_SSL==1){
  * Socket io
  */
 let InitSocketIO = require("../lib/sock");
+const https = require("https");
+const http = require("http");
 InitSocketIO(server);
 /**
  * Listen on provided port, on all network interfaces.
@@ -59,3 +62,4 @@ function onListening() {
       : 'port ' + adder.port;
   logInfo('Listening on ' + bind);
 }
+
