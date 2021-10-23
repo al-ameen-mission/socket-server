@@ -4,7 +4,9 @@ const Sequelize = require('sequelize');
 const basename = path.basename(module.filename);
 
 let db = {};
-const sequelize = new Sequelize({
+const sequelize = new Sequelize(
+    process.env.DB_NAME,
+    {
     "host": process.env.DB_HOST || "",
     "dialect": process.env.DB_DIALECT || "",
     "username": process.env.DB_USER || "",
@@ -16,7 +18,8 @@ const sequelize = new Sequelize({
 fs.readdirSync(__dirname).filter((file) => {
     return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
 }).forEach((file) => {
-    let model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);// sequelize['import'](path.join(__dirname, file));
+    let model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
+    // sequelize['import'](path.join(__dirname, file));
     db[model.name] = model;
 });
 
