@@ -54,6 +54,7 @@ class BatchQueue<T> {
 // Service
 class SubmissionService {
     private queue: BatchQueue<StudentRequest>;
+    private totalSaves: number = 0;
 
     constructor() {
         // Init Queue: Batch 100 items or flush every 2s
@@ -66,6 +67,7 @@ class SubmissionService {
     }
 
     public enqueue(req: StudentRequest) {
+        this.totalSaves++;
         this.queue.add(req);
     }
 
@@ -107,7 +109,8 @@ class SubmissionService {
     }
     public getQueueStats() {
         return {
-            bufferSize: this.queue.size
+            bufferSize: this.queue.size,
+            totalSaves: this.totalSaves
         };
     }
 }
