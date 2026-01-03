@@ -24,26 +24,15 @@ let port = process.env.PORT;
  */
 let server = null;
 let app = require('../app');
-if(process.env.ACTIVATE_SSL==1){
-  let https = require('https');
-  const credentials = {
-    key: fs.readFileSync(process.env.SSL_PRIVATE_KEY_PATH, 'utf8'),
-    cert: fs.readFileSync(process.env.SSL_CERTIFICATE_PATH, 'utf8'),
-    ca: fs.readFileSync(process.env.SSL_CA_PATH, 'utf8')
-  }
-  server = https.createServer(credentials, app);
-} else {
-  let http = require('http');
-  server = http.createServer(app);
-}
+let http = require('http');
+server = http.createServer(app);
 
 
 /**
  * Socket io
  */
 let InitSocketIO = require("../lib/sock");
-const https = require("https");
-const http = require("http");
+
 InitSocketIO(server);
 /**
  * Listen on provided port, on all network interfaces.
