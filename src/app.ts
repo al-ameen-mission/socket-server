@@ -1,46 +1,42 @@
-import createError from 'http-errors';
-import express, { Request, Response, NextFunction } from 'express';
+import express from 'express';
 import path from 'path';
 import cookieParser from 'cookie-parser';
-import logger from 'morgan';
-
-import { logError } from "./lib/log";
-import endpointRouter from './routes/endpoint';
+import loggerMiddleware from 'morgan';
+import createError from 'http-errors';
+import apiRoutes from './api/routes';
+import { logger } from './utils/logger';
 
 const app = express();
 
-// view engine setup
-app.set('views', path.join(__dirname, '../views'));
+// View Engine
+app.set('views', path.join(process.cwd(), 'views'));
 app.set('view engine', 'twig');
-//add logger
-if (process.env.NODE_ENV === "development") {
-  app.use(logger('dev'));
-}
+
+// Middleware
+// Use 'combined' or 'dev' for morgan but pipe to our logger
+app.use(loggerMiddleware('dev', {
+    stream: { write: (msg) => logger.info(msg.trim()) }
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(process.cwd(), 'public')));
 
-app.use('/', endpointRouter);
+// Routes
+app.use('/', apiRoutes);
 
-// catch 404 and forwarding to error handler
-app.use(function (req: Request, res: Response, next: NextFunction) {
-  next(createError(404));
+// 404 Handler
+app.use((req, res, next) => {
+    next(createError(404));
 });
 
-// error handler
-app.use(function (err: any, req: Request, res: Response, next: NextFunction) {
-  if (process.env.NODE_ENV === "development") {
-    //logError(err);
-  }
+// Error Handler
+app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+    res.locals.message = err.message;
+    res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = process.env.NODE_ENV === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+    res.status(err.status || 500);
+    res.render('error');
 });
 
 export default app;

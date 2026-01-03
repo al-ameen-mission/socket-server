@@ -1,44 +1,42 @@
-/**
- * Module dependencies.
- */
-import fs from "fs";
-import path from "path";
 import http from 'http';
-import { AddressInfo } from "net";
-
-import { logError, logDebug, logInfo } from "./lib/log";
 import app from './app';
-import InitSocketIO from "./lib/sock";
+import config from './config/env';
+import { logger } from './utils/logger';
+import { initSocketServer } from './socket';
 
-/**
- * Get port from environment and store in Express.
- */
-const port = process.env.PORT || 3000;
+const port = config.PORT;
+app.set('port', port);
 
-/**
- * Create HTTP server.
- */
 const server = http.createServer(app);
 
-/**
- * Socket io
- */
-InitSocketIO(server);
+// Initialize Socket.IO
+initSocketServer(server);
 
-/**
- * Listen on provided port, on all network interfaces.
- */
 server.listen(port);
-server.on('error', logError);
+server.on('error', onError);
 server.on('listening', onListening);
 
-/**
- * Event listener for HTTP server "listening" event.
- */
+function onError(error: any) {
+    if (error.syscall !== 'listen') throw error;
+    const bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port;
+
+    switch (error.code) {
+        case 'EACCES':
+            logger.error(`${bind} requires elevated privileges`);
+            process.exit(1);
+            break;
+        case 'EADDRINUSE':
+            logger.error(`${bind} is already in use`);
+            process.exit(1);
+            break;
+        default:
+            throw error;
+    }
+}
+
 function onListening() {
-  const adder = server.address();
-  const bind = typeof adder === 'string'
-      ? 'pipe ' + adder
-      : 'port ' + (adder as AddressInfo).port;
-  logInfo('Listening on ' + bind);
+    const addr = server.address();
+    if (!addr) return;
+    const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
+    logger.info(`Listening on ${bind}`);
 }

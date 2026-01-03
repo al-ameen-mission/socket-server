@@ -6,14 +6,8 @@ export interface StudentRequest {
     answer: string;
     examdetailsId: string | number;
     endtimestamp?: number;
-    // Context needed for multitenancy
+    
+    // Context injected by controller
     answer_path: string; 
     domain: string; 
-}
-
-export interface AnswerRecord {
-    studentId: string | number;
-    questionId: string | number;
-    examId?: string | number;
-    answer: string;
 }
