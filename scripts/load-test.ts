@@ -1,7 +1,7 @@
 import { io } from 'socket.io-client';
 
-const URL = 'http://localhost:3000';
-const NUM_USERS = 1000;
+const URL = 'https://socket.webtrackers.co.in';
+const NUM_USERS = 500;
 const BATCH_SIZE = 50;
 const BATCH_DELAY_MS = 1000;
 const ANSWERS = ['A', 'B', 'C', 'D'];
