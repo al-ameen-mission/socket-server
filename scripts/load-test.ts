@@ -1,19 +1,19 @@
 import { io } from 'socket.io-client';
 
-const URL = 'http://localhost:3000';
+const URL = 'https://socket.webtrackers.co.in';
 const NUM_USERS = 1000;
+const BATCH_SIZE = 50;
+const BATCH_DELAY_MS = 1000;
 const ANSWERS = ['A', 'B', 'C', 'D'];
 
 function spawnUser(id: number) {
     const socket = io(URL, {
         path: '/io',
         transports: ['websocket'],
-        forceNew: true // Ensure distinct connections
+        forceNew: true
     });
 
     socket.on('connect', () => {
-        console.log(`User ${id} connected`);
-        
         // Random interval between 1s and 5s per user
         const interval = Math.floor(Math.random() * 4000) + 1000;
         
@@ -37,7 +37,23 @@ function spawnUser(id: number) {
     });
 }
 
-console.log(`Starting simulation for ${NUM_USERS} users...`);
-for (let i = 1; i <= NUM_USERS; i++) {
-    spawnUser(i);
+async function startSimulation() {
+    console.log(`Starting simulation for ${NUM_USERS} users in batches of ${BATCH_SIZE}...`);
+    
+    for (let i = 1; i <= NUM_USERS; i += BATCH_SIZE) {
+        const end = Math.min(i + BATCH_SIZE - 1, NUM_USERS);
+        console.log(`Spawning users ${i} to ${end}...`);
+        
+        for (let j = i; j <= end; j++) {
+            spawnUser(j);
+        }
+        
+        if (end < NUM_USERS) {
+            await new Promise(resolve => setTimeout(resolve, BATCH_DELAY_MS));
+        }
+    }
+    
+    console.log('All users spawned.');
 }
+
+startSimulation();
