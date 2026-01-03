@@ -7,7 +7,9 @@ import { logger } from '../utils/logger';
 export interface AnswerRecord {
   studentId: string | number;
   questionId: string | number;
-  examId?: string | number;
+  examId: string | number;         // Required
+  examDetailsId: string | number;  // Required
+  examGroupId: string | number;    // Added & Required
   answer: string;
 }
 
@@ -18,6 +20,7 @@ interface DbInstance {
     upsert: Database.Statement;
     get: Database.Statement;
     getByExam: Database.Statement;
+    getByExamDetails: Database.Statement;
   };
 }
 
@@ -31,12 +34,16 @@ const initSchema = (db: Database.Database) => {
     CREATE TABLE IF NOT EXISTS answers (
       student_id TEXT NOT NULL,
       question_id TEXT NOT NULL,
-      exam_id TEXT,
+      exam_id TEXT NOT NULL,
+      exam_details_id TEXT NOT NULL,
+      exam_group_id TEXT NOT NULL,
       answer TEXT,
       updated_at INTEGER,
       PRIMARY KEY (student_id, question_id)
       ) WITHOUT ROWID;
     CREATE INDEX IF NOT EXISTS idx_exam_student ON answers(exam_id, student_id);
+    CREATE INDEX IF NOT EXISTS idx_exam_details ON answers(exam_details_id, student_id);
+    CREATE INDEX IF NOT EXISTS idx_exam_group ON answers(exam_group_id, student_id);
   `);
 };
 
@@ -58,8 +65,6 @@ export const getDatabase = (folderPath: string): DbInstance => {
 
   // 3. Ensure Directory (Safety)
   if (!fs.existsSync(folderPath)) {
-      // We assume caller validates existence, but we can't open a DB in non-existent dir
-      // Throwing here is better than crashing on new Database()
       throw new Error(`Database folder does not exist: ${folderPath}`);
   }
 
@@ -83,14 +88,17 @@ const openNewConnection = (key: string, folderPath: string): DbInstance => {
         lastUsed: Date.now(),
         stmts: {
             upsert: db.prepare(`
-                INSERT OR REPLACE INTO answers (student_id, question_id, exam_id, answer, updated_at)
-                VALUES (@studentId, @questionId, @examId, @answer, @timestamp)
+                INSERT OR REPLACE INTO answers (student_id, question_id, exam_id, exam_details_id, exam_group_id, answer, updated_at)
+                VALUES (@studentId, @questionId, @examId, @examDetailsId, @examGroupId, @answer, @timestamp)
             `),
             get: db.prepare(`
                 SELECT question_id, answer FROM answers WHERE student_id = ?
             `),
             getByExam: db.prepare(`
                 SELECT question_id, answer FROM answers WHERE student_id = ? AND exam_id = ?
+            `),
+            getByExamDetails: db.prepare(`
+                SELECT question_id, answer FROM answers WHERE student_id = ? AND exam_details_id = ?
             `)
         }
     };
@@ -157,7 +165,9 @@ export const upsertBatch = (folderPath: string, records: AnswerRecord[]) => {
       stmts.upsert.run({
         studentId: String(r.studentId),
         questionId: String(r.questionId),
-        examId: r.examId ? String(r.examId) : null,
+        examId: String(r.examId),
+        examDetailsId: String(r.examDetailsId),
+        examGroupId: String(r.examGroupId),
         answer: r.answer,
         timestamp
       });
@@ -167,12 +177,14 @@ export const upsertBatch = (folderPath: string, records: AnswerRecord[]) => {
   insertFn(records);
 };
 
-export const getAnswers = (folderPath: string, studentId: string | number, examId?: string | number): Record<string, string> => {
+export const getAnswers = (folderPath: string, studentId: string | number, filters?: { examId?: string, examDetailsId?: string }): Record<string, string> => {
     const { stmts } = getDatabase(folderPath);
     
     let rows;
-    if (examId) {
-        rows = stmts.getByExam.all(String(studentId), String(examId)) as { question_id: string, answer: string }[];
+    if (filters?.examDetailsId) {
+        rows = stmts.getByExamDetails.all(String(studentId), String(filters.examDetailsId)) as { question_id: string, answer: string }[];
+    } else if (filters?.examId) {
+        rows = stmts.getByExam.all(String(studentId), String(filters.examId)) as { question_id: string, answer: string }[];
     } else {
         rows = stmts.get.all(String(studentId)) as { question_id: string, answer: string }[];
     }

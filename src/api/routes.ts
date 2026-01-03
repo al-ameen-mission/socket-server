@@ -15,7 +15,7 @@ router.get('/', (req, res) => {
 
 router.post('/answers/:studentId', (req: Request, res: Response) => {
     const studentId = req.params.studentId;
-    const { hostname, examId } = req.body; // Extract hostname and optional filter from body
+    const { hostname, examId, examDetailsId } = req.body; // Extract hostname and optional filters
 
     if (!hostname) {
         res.status(400).json({ error: 'Missing hostname in request body' });
@@ -30,7 +30,7 @@ router.post('/answers/:studentId', (req: Request, res: Response) => {
     }
 
     try {
-        const answers = getAnswers(answerPath, studentId, examId);
+        const answers = getAnswers(answerPath, studentId, { examId, examDetailsId });
         res.json(answers);
     } catch (e) {
         logger.error(`API Error fetching answers: ${e}`);
