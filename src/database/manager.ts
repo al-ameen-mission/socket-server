@@ -21,6 +21,7 @@ interface DbInstance {
     get: Database.Statement;
     getByExam: Database.Statement;
     getByExamDetails: Database.Statement;
+    getByExamGroup: Database.Statement; // Added
   };
 }
 
@@ -99,6 +100,9 @@ const openNewConnection = (key: string, folderPath: string): DbInstance => {
             `),
             getByExamDetails: db.prepare(`
                 SELECT question_id, answer FROM answers WHERE student_id = ? AND exam_details_id = ?
+            `),
+            getByExamGroup: db.prepare(`
+                SELECT question_id, answer FROM answers WHERE student_id = ? AND exam_group_id = ?
             `)
         }
     };
@@ -177,18 +181,45 @@ export const upsertBatch = (folderPath: string, records: AnswerRecord[]) => {
   insertFn(records);
 };
 
-export const getAnswers = (folderPath: string, studentId: string | number, filters?: { examId?: string, examDetailsId?: string }): Record<string, string> => {
-    const { stmts } = getDatabase(folderPath);
-    
-    let rows;
-    if (filters?.examDetailsId) {
-        rows = stmts.getByExamDetails.all(String(studentId), String(filters.examDetailsId)) as { question_id: string, answer: string }[];
+export const getAnswers = (folderPath: string, studentId: string | number, filters?: { examId?: string, examGroupId?: string, examDetailsIds?: (string | number)[] }): Record<string, string> => {
+    // Priority: examDetailsIds (Array) > examGroupId > examId
+    if (filters?.examDetailsIds && Array.isArray(filters.examDetailsIds) && filters.examDetailsIds.length > 0) {
+        return getAnswersByExamDetails(folderPath, studentId, filters.examDetailsIds);
+    } else if (filters?.examGroupId) {
+        return getAnswersByExamGroup(folderPath, studentId, filters.examGroupId);
     } else if (filters?.examId) {
-        rows = stmts.getByExam.all(String(studentId), String(filters.examId)) as { question_id: string, answer: string }[];
-    } else {
-        rows = stmts.get.all(String(studentId)) as { question_id: string, answer: string }[];
-    }
+        return getAnswersByExam(folderPath, studentId, filters.examId);
+    } 
     
+    // Default: Get all
+    const { stmts } = getDatabase(folderPath);
+    const rows = stmts.get.all(String(studentId)) as { question_id: string, answer: string }[];
+    return mapRowsToRecord(rows);
+}
+
+export const getAnswersByExam = (folderPath: string, studentId: string | number, examId: string | number): Record<string, string> => {
+    const { stmts } = getDatabase(folderPath);
+    const rows = stmts.getByExam.all(String(studentId), String(examId)) as { question_id: string, answer: string }[];
+    return mapRowsToRecord(rows);
+}
+
+export const getAnswersByExamGroup = (folderPath: string, studentId: string | number, examGroupId: string | number): Record<string, string> => {
+    const { stmts } = getDatabase(folderPath);
+    const rows = stmts.getByExamGroup.all(String(studentId), String(examGroupId)) as { question_id: string, answer: string }[];
+    return mapRowsToRecord(rows);
+}
+
+export const getAnswersByExamDetails = (folderPath: string, studentId: string | number, examDetailsIds: (string | number)[]): Record<string, string> => {
+    const { db } = getDatabase(folderPath);
+    if (!examDetailsIds || examDetailsIds.length === 0) return {};
+
+    const placeholders = examDetailsIds.map(() => '?').join(',');
+    const sql = `SELECT question_id, answer FROM answers WHERE student_id = ? AND exam_details_id IN (${placeholders})`;
+    const rows = db.prepare(sql).all(String(studentId), ...examDetailsIds) as { question_id: string, answer: string }[];
+    return mapRowsToRecord(rows);
+}
+
+const mapRowsToRecord = (rows: { question_id: string, answer: string }[]) => {
     const result: Record<string, string> = {};
     for (const row of rows) {
         result[row.question_id] = row.answer;
