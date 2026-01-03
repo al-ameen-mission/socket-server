@@ -260,7 +260,8 @@
           resultsContainer.classList.remove('opacity-50');
 
           if (res.ok) {
-              const count = Object.keys(data).length;
+              const records = data;
+              const count = records.length;
               handle_log(`Success: ${count} records`, "in");
               statusLabel.innerText = `${count} Records`;
               statusLabel.className = "text-[10px] font-bold text-green-600 bg-green-100 px-2 py-0.5 rounded-full";
@@ -270,16 +271,33 @@
                  return;
               }
 
-              let html = `<div class="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 gap-px bg-slate-200 border border-slate-200">`;
-              for (const [qid, ans] of Object.entries(data)) {
+              // Render Table for all fields
+              let html = `
+                <table class="w-full text-left text-[10px] border-collapse bg-white">
+                  <thead class="bg-slate-50 sticky top-0 border-b border-slate-200">
+                    <tr>
+                      <th class="p-2 font-bold text-slate-400 uppercase">QID</th>
+                      <th class="p-2 font-bold text-slate-400 uppercase">Answer</th>
+                      <th class="p-2 font-bold text-slate-400 uppercase">Exam</th>
+                      <th class="p-2 font-bold text-slate-400 uppercase">Group</th>
+                      <th class="p-2 font-bold text-slate-400 uppercase">Details</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-100">`;
+              
+              records.forEach(r => {
                   html += `
-                    <div class="bg-white p-2 flex flex-col items-center justify-center hover:bg-blue-50 transition-colors cursor-default h-12" title="Question: ${qid}">
-                        <div class="text-[8px] text-slate-400 uppercase font-bold tracking-wider">Q${qid}</div>
-                        <div class="text-xs font-bold text-slate-700">${ans}</div>
-                    </div>
+                    <tr class="hover:bg-slate-50 transition-colors">
+                      <td class="p-2 font-bold text-slate-700">Q${r.questionId}</td>
+                      <td class="p-2"><span class="bg-blue-50 text-blue-700 px-1.5 py-0.5 rounded font-bold">${r.answer}</span></td>
+                      <td class="p-2 text-slate-500 font-mono">${r.examId}</td>
+                      <td class="p-2 text-slate-500 font-mono">${r.examGroupId}</td>
+                      <td class="p-2 text-slate-400 font-mono truncate max-w-[100px]" title="${r.examDetailsId}">${r.examDetailsId}</td>
+                    </tr>
                   `;
-              }
-              html += `</div>`;
+              });
+              
+              html += `</tbody></table>`;
               resultsContainer.innerHTML = html;
 
           } else {
