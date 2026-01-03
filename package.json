@@ -8,12 +8,10 @@
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
-    "debug": "~2.6.9",
     "dotenv": "^10.0.0",
     "dynamic-queue": "^0.2.1",
     "express": "^4.18.2",
     "http-errors": "~1.6.3",
-    "https": "^1.0.0",
     "less-middleware": "~2.2.1",
     "moment": "^2.29.1",
     "morgan": "~1.9.1",
@@ -21,6 +19,6 @@
     "twig": "~0.10.3"
   },
   "volta": {
-    "node": "18.20.8"
+    "node": "24.12.0"
   }
 }
