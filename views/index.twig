@@ -87,6 +87,40 @@
 
       </div>
     </div>
+      
+      <!-- API Test Panel (New) -->
+       <div class="bg-white rounded-xl shadow-lg border border-slate-100 p-6">
+         <h5 class="text-lg font-semibold text-slate-800 mb-4 pb-2 border-b border-slate-100">API Test: /answers/:id</h5>
+         
+         <div class="space-y-4">
+             <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Hostname (Required)</label>
+                <input type="text" id="_api_hostname" class="w-full px-4 py-2 rounded-lg border border-slate-300 text-sm" value="localhost">
+             </div>
+              <div class="grid grid-cols-2 gap-4">
+                 <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Filter: Exam ID</label>
+                    <input type="text" id="_api_examId" class="w-full px-4 py-2 rounded-lg border border-slate-300 text-sm" placeholder="Optional">
+                 </div>
+                 <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Filter: Group ID</label>
+                    <input type="text" id="_api_examGroupId" class="w-full px-4 py-2 rounded-lg border border-slate-300 text-sm" placeholder="Optional">
+                 </div>
+             </div>
+             <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Filter: Details ID (Comma sep for array)</label>
+                 <input type="text" id="_api_examDetailsId" class="w-full px-4 py-2 rounded-lg border border-slate-300 text-sm" placeholder="Optional">
+             </div>
+             
+             <div class="pt-2">
+                 <button onclick="test_api()" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-medium py-2.5 rounded-lg shadow-md transition-all">
+                    Fetch Answers via API
+                 </button>
+             </div>
+         </div>
+       </div>
+
+    </div>
     </div>
 
     <!-- Logs Panel (Right Column) -->
@@ -182,6 +216,41 @@
     handle_log(`Sent Answer: Q${payload.questionId} = ${payload.answer}`, "out");
   }
 
+  async function test_api() {
+      const studentId = document.querySelector("#_studentId").value;
+      const hostname = document.querySelector("#_api_hostname").value;
+      const examId = document.querySelector("#_api_examId").value;
+      const examGroupId = document.querySelector("#_api_examGroupId").value;
+      const examDetailsRaw = document.querySelector("#_api_examDetailsId").value;
+      
+      const payload = { hostname };
+      if (examId) payload.examId = examId;
+      if (examGroupId) payload.examGroupId = examGroupId;
+      if (examDetailsRaw) {
+          // split by comma and trim
+          payload.examDetailsId = examDetailsRaw.split(',').map(s => s.trim());
+      }
+
+      handle_log(`API Req: /answers/${studentId} ` + JSON.stringify(payload), "out");
+
+      try {
+          const res = await fetch(`/answers/${studentId}`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload)
+          });
+          
+          const data = await res.json();
+          if (res.ok) {
+              handle_log(`API Res: Found ${Object.keys(data).length} answers`, "in");
+              console.log("API Response:", data);
+          } else {
+              handle_log(`API Error: ${data.error}`, "in");
+          }
+      } catch (e) {
+          handle_log(`API Network Error: ${e}`, "in");
+      }
+  }
 
 </script>
 {% endblock %}
