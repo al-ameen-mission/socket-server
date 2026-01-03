@@ -4,12 +4,7 @@
 let fs = require("fs");
 let path = require("path");
 
-//Environment variable Setup
-if(process.env.NODE_ENV==="development"){
-  require('dotenv').config({ path: path.resolve(__dirname+"/../.env.devlopment") });
-} else {
-  require('dotenv').config();
-}
+
 
 let {logError, logDebug, logInfo} = require("../lib/log");
 

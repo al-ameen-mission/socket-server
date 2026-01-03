@@ -9,7 +9,6 @@
   "dependencies": {
     "cookie-parser": "~1.4.4",
     "dynamic-queue": "^0.2.1",
-
     "express": "^4.18.2",
     "http-errors": "~1.6.3",
     "less-middleware": "~2.2.1",
