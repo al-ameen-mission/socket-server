@@ -88,7 +88,7 @@
            </div>
            <div class="text-center">
               <span class="text-[9px] font-bold text-slate-400 uppercase block">CPU</span>
-              <span class="text-[11px] font-mono text-amber-600 font-bold" id="stat-cpu">0s</span>
+              <span class="text-[11px] font-mono text-amber-600 font-bold" id="stat-cpu">0%</span>
            </div>
            <div class="text-center">
               <span class="text-[9px] font-bold text-slate-400 uppercase block">Memory</span>
@@ -209,7 +209,8 @@
       <div class="flex gap-4">
         <div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-indigo-500"></span><span class="text-[10px] text-slate-400 font-bold uppercase">Queue</span></div>
         <div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500"></span><span class="text-[10px] text-slate-400 font-bold uppercase">Pool</span></div>
-        <div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-rose-500"></span><span class="text-[10px] text-slate-400 font-bold uppercase">Memory</span></div>
+        <div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-amber-500"></span><span class="text-[10px] text-slate-400 font-bold uppercase">CPU %</span></div>
+        <div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-rose-500"></span><span class="text-[10px] text-slate-400 font-bold uppercase">Mem</span></div>
       </div>
     </div>
     <div class="h-[180px] w-full">
@@ -254,6 +255,7 @@
           datasets: [
               { label: 'Queue', borderColor: '#4f46e5', backgroundColor: 'rgba(79, 70, 229, 0.1)', data: Array(MAX_DATA_POINTS).fill(0), borderWidth: 2, tension: 0, pointRadius: 0, fill: true },
               { label: 'Pool', borderColor: '#10b981', backgroundColor: 'transparent', data: Array(MAX_DATA_POINTS).fill(0), borderWidth: 2, tension: 0, pointRadius: 0 },
+              { label: 'CPU %', borderColor: '#f59e0b', backgroundColor: 'transparent', data: Array(MAX_DATA_POINTS).fill(0), borderWidth: 2, tension: 0, pointRadius: 0 },
               { label: 'Memory', borderColor: '#e11d48', backgroundColor: 'transparent', data: Array(MAX_DATA_POINTS).fill(0), borderWidth: 2, tension: 0.4, pointRadius: 0 }
           ]
       },
@@ -312,14 +314,15 @@
           document.getElementById('stat-sockets').innerText = data.sockets.connected;
           document.getElementById('stat-queue').innerText = data.queue.bufferSize;
           document.getElementById('stat-db').innerText = data.database.openConnections;
-          document.getElementById('stat-cpu').innerText = data.cpu.user + 's';
+          document.getElementById('stat-cpu').innerText = data.cpu.percentage + '%';
           document.getElementById('stat-mem').innerText = data.memory.rss + 'M';
 
           // Update Chart
           statsChart.data.labels.push(now);
           statsChart.data.datasets[0].data.push(data.queue.bufferSize);
           statsChart.data.datasets[1].data.push(data.database.openConnections);
-          statsChart.data.datasets[2].data.push(data.memory.rss);
+          statsChart.data.datasets[2].data.push(data.cpu.percentage);
+          statsChart.data.datasets[3].data.push(data.memory.rss);
           
           if (statsChart.data.labels.length > MAX_DATA_POINTS) {
               statsChart.data.labels.shift();

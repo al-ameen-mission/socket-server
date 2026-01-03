@@ -10,6 +10,26 @@ import { answerFilterSchema } from './schemas';
 
 const router = Router();
 
+// CPU Percentage Tracker
+let lastCpuUsage = process.cpuUsage();
+let lastHrTime = process.hrtime();
+let currentCpuPercent = 0;
+
+setInterval(() => {
+    const hrTime = process.hrtime(lastHrTime);
+    const cpuUsage = process.cpuUsage(lastCpuUsage);
+    
+    lastHrTime = process.hrtime();
+    lastCpuUsage = process.cpuUsage();
+    
+    const elapTimeMS = hrTime[0] * 1000 + hrTime[1] / 1000000;
+    const elapUserMS = cpuUsage.user / 1000;
+    const elapSystMS = cpuUsage.system / 1000;
+    const cpuPercent = (100 * (elapUserMS + elapSystMS) / elapTimeMS);
+    
+    currentCpuPercent = Math.round(cpuPercent * 10) / 10; // 1 decimal place
+}, 2000).unref();
+
 router.get('/', (req, res) => {
     res.render('index', { 
         title: 'WTOS Examination System',
@@ -61,8 +81,7 @@ router.get('/stats', (req, res) => {
                 connected: io ? io.engine.clientsCount : 0
             },
             cpu: {
-                user: Math.round(cpuUsage.user / 1000000), // Convert to seconds
-                system: Math.round(cpuUsage.system / 1000000)
+                percentage: currentCpuPercent
             },
             memory: {
                 rss: Math.round(memUsage.rss / 1024 / 1024), // MB
