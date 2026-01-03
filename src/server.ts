@@ -1,48 +1,44 @@
 /**
  * Module dependencies.
  */
-let fs = require("fs");
-let path = require("path");
+import fs from "fs";
+import path from "path";
+import http from 'http';
+import { AddressInfo } from "net";
 
-
-
-let {logError, logDebug, logInfo} = require("../lib/log");
+import { logError, logDebug, logInfo } from "./lib/log";
+import app from './app';
+import InitSocketIO from "./lib/sock";
 
 /**
  * Get port from environment and store in Express.
  */
-let port = process.env.PORT;
+const port = process.env.PORT || 3000;
 
 /**
  * Create HTTP server.
  */
-let server = null;
-let app = require('../app');
-let http = require('http');
-server = http.createServer(app);
-
+const server = http.createServer(app);
 
 /**
  * Socket io
  */
-let InitSocketIO = require("../lib/sock");
-
 InitSocketIO(server);
+
 /**
  * Listen on provided port, on all network interfaces.
  */
 server.listen(port);
 server.on('error', logError);
 server.on('listening', onListening);
+
 /**
  * Event listener for HTTP server "listening" event.
  */
-
 function onListening() {
-  let adder = server.address();
-  let bind = typeof adder === 'string'
+  const adder = server.address();
+  const bind = typeof adder === 'string'
       ? 'pipe ' + adder
-      : 'port ' + adder.port;
+      : 'port ' + (adder as AddressInfo).port;
   logInfo('Listening on ' + bind);
 }
-
