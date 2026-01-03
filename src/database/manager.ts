@@ -17,6 +17,7 @@ interface DbInstance {
   stmts: {
     upsert: Database.Statement;
     get: Database.Statement;
+    getByExam: Database.Statement;
   };
 }
 
@@ -87,6 +88,9 @@ const openNewConnection = (key: string, folderPath: string): DbInstance => {
             `),
             get: db.prepare(`
                 SELECT question_id, answer FROM answers WHERE student_id = ?
+            `),
+            getByExam: db.prepare(`
+                SELECT question_id, answer FROM answers WHERE student_id = ? AND exam_id = ?
             `)
         }
     };
@@ -163,9 +167,15 @@ export const upsertBatch = (folderPath: string, records: AnswerRecord[]) => {
   insertFn(records);
 };
 
-export const getAnswers = (folderPath: string, studentId: string | number): Record<string, string> => {
+export const getAnswers = (folderPath: string, studentId: string | number, examId?: string | number): Record<string, string> => {
     const { stmts } = getDatabase(folderPath);
-    const rows = stmts.get.all(String(studentId)) as { question_id: string, answer: string }[];
+    
+    let rows;
+    if (examId) {
+        rows = stmts.getByExam.all(String(studentId), String(examId)) as { question_id: string, answer: string }[];
+    } else {
+        rows = stmts.get.all(String(studentId)) as { question_id: string, answer: string }[];
+    }
     
     const result: Record<string, string> = {};
     for (const row of rows) {
