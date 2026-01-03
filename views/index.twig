@@ -8,80 +8,87 @@
     <p class="text-slate-500">Real-time socket communication console</p>
   </div>
 
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
     
     <!-- Left Column -->
-    <div class="space-y-6">
+    <div class="space-y-8">
         
-       <!-- Stats Panel (New) -->
-       <div class="bg-white rounded-xl shadow-lg border border-slate-100 p-6 relative overflow-hidden">
-         <div class="absolute top-0 left-0 w-1 h-full bg-blue-500"></div>
-         <h5 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4">System Monitor</h5>
+       <!-- Stats Panel -->
+       <div class="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 p-6 relative overflow-hidden group hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300">
+         <div class="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-blue-500 to-indigo-600"></div>
+         <h5 class="text-xs font-bold text-slate-400 uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+            System Monitor
+         </h5>
          
-         <div class="grid grid-cols-3 gap-4 text-center divide-x divide-slate-100">
-             <div>
-                <div class="text-2xl font-bold text-slate-800" id="stat-queue">0</div>
-                <div class="text-xs text-slate-400">Queue Buffer</div>
+         <div class="grid grid-cols-3 gap-8 text-center divide-x divide-slate-100">
+             <div class="group/stat">
+                <div class="text-3xl font-black text-slate-800 tracking-tight group-hover/stat:text-blue-600 transition-colors" id="stat-queue">0</div>
+                <div class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mt-1">Buffer</div>
              </div>
-             <div>
-                <div class="text-2xl font-bold text-slate-800" id="stat-db">0</div>
-                <div class="text-xs text-slate-400">Open DBs</div>
+             <div class="group/stat">
+                <div class="text-3xl font-black text-slate-800 tracking-tight group-hover/stat:text-indigo-600 transition-colors" id="stat-db">0</div>
+                <div class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mt-1">Databases</div>
              </div>
-              <div>
-                <div class="text-2xl font-bold text-slate-800" id="stat-mem">0</div>
-                <div class="text-xs text-slate-400">RAM (MB)</div>
+              <div class="group/stat">
+                <div class="text-3xl font-black text-slate-800 tracking-tight group-hover/stat:text-purple-600 transition-colors" id="stat-mem">0</div>
+                <div class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mt-1">Memory</div>
              </div>
          </div>
        </div>
 
       <!-- Input Panel -->
-      <div class="bg-white rounded-xl shadow-lg border border-slate-100 p-6">
+      <div class="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 p-8">
         <!-- ... existing inputs ... -->
-        <h5 class="text-lg font-semibold text-slate-800 mb-4 pb-2 border-b border-slate-100">Test Parameters</h5>
+        <h5 class="text-lg font-bold text-slate-800 mb-6 flex items-center gap-3">
+             <span class="p-2 rounded-lg bg-orange-50 text-orange-500"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></span>
+            Test Parameters
+        </h5>
       
-      <div class="space-y-4">
+       <div class="space-y-5">
         
         <div>
-          <label class="block text-sm font-medium text-slate-700 mb-1">Student ID</label>
-          <input type="text" id="_studentId" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm" value="1" placeholder="Student ID">
+          <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Student ID</label>
+          <input type="text" id="_studentId" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all font-medium text-slate-700" value="1" placeholder="Student ID">
         </div>
 
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-2 gap-5">
           <div>
-            <label class="block text-sm font-medium text-slate-700 mb-1">History ID</label>
-            <input type="text" id="_historyId" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm" value="1" placeholder="History ID">
+            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">History ID</label>
+            <input type="text" id="_historyId" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all font-medium text-slate-700" value="1" placeholder="History ID">
           </div>
           <div>
-            <label class="block text-sm font-medium text-slate-700 mb-1">Exam ID</label>
-            <input type="text" id="_examId" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm" value="1" placeholder="Exam ID">
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-4">
-          <div>
-             <label class="block text-sm font-medium text-slate-700 mb-1">Exam Group ID</label>
-             <input type="text" id="_exam_group_id" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm" value="1" placeholder="Exam Group ID">
-          </div>
-          <div>
-             <label class="block text-sm font-medium text-slate-700 mb-1">Details ID</label>
-             <input type="text" id="_examdetailsId" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm" value="1" placeholder="Details ID">
+            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Exam ID</label>
+            <input type="text" id="_examId" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all font-medium text-slate-700" value="1" placeholder="Exam ID">
           </div>
         </div>
 
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-2 gap-5">
           <div>
-             <label class="block text-sm font-medium text-slate-700 mb-1">Question ID</label>
-             <input type="text" id="_questionId" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm" value="1" placeholder="Q ID">
+             <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Group ID</label>
+             <input type="text" id="_exam_group_id" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all font-medium text-slate-700" value="1" placeholder="Group ID">
+          </div>
+          <div>
+             <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Details ID</label>
+             <input type="text" id="_examdetailsId" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all font-medium text-slate-700" value="1" placeholder="Details ID">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-5">
+          <div>
+             <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Question ID</label>
+             <input type="text" id="_questionId" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all font-medium text-slate-700" value="1" placeholder="Q ID">
           </div>
            <div>
-             <label class="block text-sm font-medium text-slate-700 mb-1">Answer</label>
-             <input type="text" id="_answer" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm" value="A" placeholder="Answer option">
+             <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Answer</label>
+             <input type="text" id="_answer" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all font-medium text-slate-700" value="A" placeholder="Answer option">
           </div>
         </div>
 
-        <div class="pt-4">
-          <button onclick="save_text_answer()" class="w-full bg-primary hover:bg-blue-700 text-white font-medium py-2.5 rounded-lg shadow-md hover:shadow-lg transition-all active:scale-[0.98]">
+        <div class="pt-6">
+          <button onclick="save_text_answer()" class="group w-full bg-slate-900 hover:bg-black text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-xl transition-all active:scale-[0.98] flex items-center justify-center gap-2">
             Send Answer Payload
+            <svg class="w-4 h-4 text-slate-400 group-hover:text-white transition-colors" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
           </button>
         </div>
 
@@ -89,57 +96,65 @@
     </div>
       
       <!-- API Test Panel (New) -->
-       <div class="bg-white rounded-xl shadow-lg border border-slate-100 p-6">
-         <h5 class="text-lg font-semibold text-slate-800 mb-4 pb-2 border-b border-slate-100">API Test: /answers/:id</h5>
+       <div class="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 p-8">
+         <h5 class="text-lg font-bold text-slate-800 mb-6 flex items-center gap-3">
+            <span class="p-2 rounded-lg bg-green-50 text-green-500"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></span>
+            API Verification
+         </h5>
          
-         <div class="space-y-4">
+         <div class="space-y-5">
              <div>
-                <label class="block text-sm font-medium text-slate-700 mb-1">Hostname (Required)</label>
-                <input type="text" id="_api_hostname" class="w-full px-4 py-2 rounded-lg border border-slate-300 text-sm" value="localhost">
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Hostname <span class="text-red-400">*</span></label>
+                <input type="text" id="_api_hostname" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500 transition-all font-medium text-slate-700" value="localhost">
              </div>
-              <div class="grid grid-cols-2 gap-4">
+              <div class="grid grid-cols-2 gap-5">
                  <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">Filter: Exam ID</label>
-                    <input type="text" id="_api_examId" class="w-full px-4 py-2 rounded-lg border border-slate-300 text-sm" placeholder="Optional">
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Filter Exam</label>
+                    <input type="text" id="_api_examId" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500 transition-all font-medium text-slate-700" placeholder="Exam UUID">
                  </div>
                  <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">Filter: Group ID</label>
-                    <input type="text" id="_api_examGroupId" class="w-full px-4 py-2 rounded-lg border border-slate-300 text-sm" placeholder="Optional">
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Filter Group</label>
+                    <input type="text" id="_api_examGroupId" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500 transition-all font-medium text-slate-700" placeholder="Group UUID">
                  </div>
              </div>
              <div>
-                <label class="block text-sm font-medium text-slate-700 mb-1">Filter: Details ID (Comma sep for array)</label>
-                 <input type="text" id="_api_examDetailsId" class="w-full px-4 py-2 rounded-lg border border-slate-300 text-sm" placeholder="Optional">
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Filter Details (Array)</label>
+                 <input type="text" id="_api_examDetailsId" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500 transition-all font-medium text-slate-700" placeholder="id1, id2, id3">
              </div>
              
              <div class="pt-2">
-                 <button onclick="test_api()" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-medium py-2.5 rounded-lg shadow-md transition-all">
-                    Fetch Answers via API
+                 <button onclick="test_api()" class="group w-full bg-white hover:bg-green-50 text-slate-700 hover:text-green-700 font-bold py-4 rounded-xl border-2 border-slate-200 hover:border-green-200 shadow-sm hover:shadow-md transition-all active:scale-[0.98] flex items-center justify-center gap-2">
+                    Fetch Database Records
+                    <svg class="w-4 h-4 text-slate-400 group-hover:text-green-500 transition-colors" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                  </button>
              </div>
          </div>
        </div>
 
     </div>
-    </div>
 
     <!-- Logs Panel (Right Column) -->
-    <div class="bg-white rounded-xl shadow-lg border border-slate-100 flex flex-col h-full max-h-[800px]">
+    <div class="bg-slate-900 rounded-3xl shadow-2xl shadow-slate-200 overflow-hidden flex flex-col h-full max-h-[900px]">
        <!-- ... logs ... -->
-       <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50 rounded-t-xl">
-          <h5 class="text-sm font-semibold text-slate-600 uppercase tracking-wider">Live Logs</h5>
-          <span class="flex h-3 w-3 relative">
-            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-            <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-          </span>
+       <div class="p-6 border-b border-white/10 flex justify-between items-center bg-white/5 backdrop-blur-sm">
+          <div class="flex items-center gap-3">
+               <span class="flex h-3 w-3 relative">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+              </span>
+              <h5 class="text-xs font-bold text-slate-400 uppercase tracking-widest">Live Feed</h5>
+          </div>
+          <div class="text-[10px] bg-white/10 text-slate-400 px-2 py-1 rounded">
+             SOCKET: CONNECTED
+          </div>
        </div>
        
-       <div id="console_log" class="flex-1 overflow-y-auto p-4 space-y-2 bg-slate-50 font-mono text-xs">
+       <div id="console_log" class="flex-1 overflow-y-auto p-6 space-y-3 font-mono text-xs text-slate-300 scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent">
           <!-- Logs injected here -->
        </div>
     </div>
 
-  </div>
+  </div> <!-- End Grid -->
 
 <script>
   // ... (existing log logic) ...
@@ -147,15 +162,16 @@
   function handle_log(msg, type='in'){
       // ... same logic ...
       const now = new Date().toLocaleTimeString();
-      const colorClass = type === 'in' ? 'text-green-600' : 'text-blue-600';
+      // Updated colors for dark theme contrast
+      const colorClass = type === 'in' ? 'text-emerald-400' : 'text-blue-300'; 
       const arrow = type === 'in' ? '←' : '→';
       
       const el = document.createElement('div');
-      el.className = `flex gap-2 items-start border-b border-slate-100 pb-1 last:border-0`;
+      el.className = `flex gap-3 items-start border-b border-white/5 pb-2 last:border-0 hover:bg-white/5 transition-colors p-1 rounded`;
       el.innerHTML = `
-        <span class="text-slate-400 shrink-0">[${now}]</span>
-        <span class="${colorClass} font-bold">${arrow}</span>
-        <span class="text-slate-700 break-all">${msg}</span>
+        <span class="text-slate-500 shrink-0 font-light text-[10px] pt-0.5 font-mono">[${now}]</span>
+        <span class="${colorClass} font-bold font-mono">${arrow}</span>
+        <span class="text-slate-300 break-all font-sans leading-relaxed">${msg}</span>
       `;
 
       const container = document.querySelector("#console_log");
@@ -216,7 +232,7 @@
     handle_log(`Sent Answer: Q${payload.questionId} = ${payload.answer}`, "out");
   }
 
-  async function test_api() {
+  window.test_api = async function() {
       const studentId = document.querySelector("#_studentId").value;
       const hostname = document.querySelector("#_api_hostname").value;
       const examId = document.querySelector("#_api_examId").value;
@@ -227,7 +243,6 @@
       if (examId) payload.examId = examId;
       if (examGroupId) payload.examGroupId = examGroupId;
       if (examDetailsRaw) {
-          // split by comma and trim
           payload.examDetailsId = examDetailsRaw.split(',').map(s => s.trim());
       }
 
