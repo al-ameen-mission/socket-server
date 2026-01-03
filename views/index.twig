@@ -2,15 +2,15 @@
 
 {% block body %}
 
-<div class="max-w-7xl mx-auto p-4 md:p-6 font-inter">
+<div class="max-w-7xl mx-auto p-4 md:p-6 font-inter space-y-8">
   
-  <div class="flex flex-col md:flex-row gap-4 items-center justify-between mb-6">
+  <!-- Header & Stats -->
+  <div class="flex flex-col md:flex-row gap-4 items-center justify-between">
     <div>
       <h3 class="text-xl font-bold text-slate-800 tracking-tight">WTOS Console</h3>
       <p class="text-xs text-slate-500">Real-time Examination Monitor</p>
     </div>
     
-    <!-- Compact Stats Strip -->
     <div class="flex gap-4 bg-white px-4 py-2 rounded-lg border border-slate-200 shadow-sm text-xs">
          <div class="flex items-center gap-2">
             <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
@@ -32,132 +32,144 @@
     </div>
   </div>
 
-  <div class="grid grid-cols-12 gap-6">
-    
-    <!-- Left Column: Controls (4 cols) -->
-    <div class="col-span-12 lg:col-span-4 space-y-4">
-
-      <!-- Socket Input Panel (Compact) -->
-      <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-        <div class="bg-slate-50 px-4 py-2 border-b border-slate-200 flex items-center justify-between">
-            <h5 class="text-xs font-bold text-slate-700 uppercase tracking-widest">Socket Input</h5>
-            <div class="w-2 h-2 rounded-full bg-green-500"></div>
-        </div>
-        <div class="p-4 space-y-3">
-            <div class="grid grid-cols-2 gap-3">
-                <div>
-                   <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Student</label>
-                   <input type="text" id="_studentId" class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500 outline-none" value="1">
-                </div>
-                 <div>
-                   <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">History</label>
-                   <input type="text" id="_historyId" class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500 outline-none" value="1">
-                </div>
-            </div>
-            <div class="grid grid-cols-2 gap-3">
-                 <div>
-                   <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Exam ID</label>
-                   <input type="text" id="_examId" class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500 outline-none" value="1">
-                </div>
-                 <div>
-                   <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Group ID</label>
-                   <input type="text" id="_exam_group_id" class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500 outline-none" value="1">
-                </div>
-            </div>
-             <div>
-               <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Details ID</label>
-               <input type="text" id="_examdetailsId" class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500 outline-none" value="1">
-            </div>
-             <div class="grid grid-cols-3 gap-3">
-                 <div class="col-span-2">
-                   <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Question ID</label>
-                   <input type="text" id="_questionId" class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500 outline-none" value="1">
-                </div>
-                 <div>
-                   <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Ans</label>
-                   <input type="text" id="_answer" class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500 outline-none" value="A">
-                </div>
-            </div>
-            <button onclick="save_text_answer()" class="w-full mt-2 bg-slate-800 hover:bg-black text-white text-xs font-semibold py-2 rounded transition-colors shadow-sm">
-                Send Socket Payload
-            </button>
+  <!-- SECTION 1: Socket Protocol -->
+  <div class="space-y-3">
+    <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest px-1">Section 1: Real-time Socket Protocol</h4>
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      
+      <!-- Left: Socket Input -->
+      <div class="lg:col-span-4">
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden h-full">
+          <div class="bg-slate-50 px-4 py-2 border-b border-slate-200 flex items-center justify-between">
+              <h5 class="text-xs font-bold text-slate-700 uppercase tracking-widest">Socket Event Emitter</h5>
+              <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+          </div>
+          <div class="p-4 space-y-3">
+              <div class="grid grid-cols-2 gap-3">
+                  <div>
+                     <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Student</label>
+                     <input type="text" id="_studentId" class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all" value="1">
+                  </div>
+                   <div>
+                     <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">History</label>
+                     <input type="text" id="_historyId" class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all" value="1">
+                  </div>
+              </div>
+              <div class="grid grid-cols-2 gap-3">
+                   <div>
+                     <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Exam ID</label>
+                     <input type="text" id="_examId" class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all" value="1">
+                  </div>
+                   <div>
+                     <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Group ID</label>
+                     <input type="text" id="_exam_group_id" class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all" value="1">
+                  </div>
+              </div>
+               <div>
+                 <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Details ID</label>
+                 <input type="text" id="_examdetailsId" class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all" value="1">
+              </div>
+               <div class="grid grid-cols-3 gap-3">
+                   <div class="col-span-2">
+                     <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Question ID</label>
+                     <input type="text" id="_questionId" class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all" value="1">
+                  </div>
+                   <div>
+                     <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Ans</label>
+                     <input type="text" id="_answer" class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all" value="A">
+                  </div>
+              </div>
+              <button onclick="save_text_answer()" class="w-full mt-2 bg-slate-800 hover:bg-black text-white text-xs font-bold py-2.5 rounded transition-all shadow-sm active:scale-[0.98]">
+                  Emit Payload
+              </button>
+          </div>
         </div>
       </div>
 
-       <!-- API Control Panel (Compact) -->
-       <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-         <div class="bg-slate-50 px-4 py-2 border-b border-slate-200 flex items-center justify-between">
-            <h5 class="text-xs font-bold text-slate-700 uppercase tracking-widest">API Fetch</h5>
-            <div class="text-[10px] font-mono text-slate-400">POST /answers/:id</div>
-        </div>
-         <div class="p-4 space-y-3">
-             <div>
-                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Hostname <span class="text-red-500">*</span></label>
-                <input type="text" id="_api_hostname" class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded text-xs focus:ring-1 focus:ring-green-500 focus:border-green-500 outline-none" value="localhost">
-             </div>
-              <div class="grid grid-cols-2 gap-3">
-                 <div>
-                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Filter Exam</label>
-                    <input type="text" id="_api_examId" class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded text-xs focus:ring-1 focus:ring-green-500 focus:border-green-500 outline-none" placeholder="Optional">
-                 </div>
-                 <div>
-                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Filter Group</label>
-                    <input type="text" id="_api_examGroupId" class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded text-xs focus:ring-1 focus:ring-green-500 focus:border-green-500 outline-none" placeholder="Optional">
-                 </div>
-             </div>
-             <div>
-                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Filter Details (a,b,c)</label>
-                 <input type="text" id="_api_examDetailsId" class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded text-xs focus:ring-1 focus:ring-green-500 focus:border-green-500 outline-none" placeholder="Optional">
+      <!-- Right: Live Logs -->
+      <div class="lg:col-span-8">
+         <div class="bg-slate-900 rounded-xl shadow-lg border border-slate-800 flex flex-col h-[320px] overflow-hidden">
+             <div class="px-4 py-2 border-b border-slate-800 bg-slate-900 flex justify-between items-center">
+               <div class="flex items-center gap-2">
+                    <span class="relative flex h-2 w-2">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    </span>
+                   <h5 class="text-xs font-bold text-slate-500 uppercase tracking-widest">Live Terminal</h5>
+               </div>
+               <div class="text-[10px] font-mono text-slate-600">socket.io</div>
              </div>
              
-             <button onclick="test_api()" class="w-full mt-2 bg-white hover:bg-green-50 text-slate-700 border border-slate-300 hover:border-green-300 text-xs font-semibold py-2 rounded transition-colors shadow-sm flex items-center justify-center gap-2">
-                 Fetch Answers
-             </button>
-         </div>
-       </div>
-
-    </div>
-
-    <!-- Right Column: Outputs (8 cols) -->
-    <div class="col-span-12 lg:col-span-8 space-y-4">
-        
-       <!-- API Results (New Separate Block) -->
-       <div class="bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col h-[300px] overflow-hidden">
-           <div class="px-4 py-2 border-b border-slate-200 bg-slate-50 flex justify-between items-center">
-             <h5 class="text-xs font-bold text-slate-700 uppercase tracking-widest">API Results</h5>
-             <span class="text-[10px] text-slate-400" id="result-status">No data fetched</span>
-           </div>
-           
-           <div class="flex-1 overflow-auto bg-slate-50/50 p-0" id="api_results_container">
-                <!-- Empty State -->
-                <div class="h-full flex flex-col items-center justify-center text-slate-300">
-                    <svg class="w-8 h-8 mb-2 opacity-50" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/></svg>
-                    <span class="text-xs">Results will visually appear here</span>
-                </div>
-           </div>
-       </div>
-
-       <!-- Logs -->
-       <div class="bg-slate-900 rounded-xl shadow-lg border border-slate-800 flex flex-col h-[300px] overflow-hidden">
-           <div class="px-4 py-2 border-b border-slate-800 bg-slate-900 flex justify-between items-center">
-             <div class="flex items-center gap-2">
-                  <span class="relative flex h-2 w-2">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                  </span>
-                 <h5 class="text-xs font-bold text-slate-500 uppercase tracking-widest">Live Terminal</h5>
+             <div id="console_log" class="flex-1 overflow-y-auto p-4 space-y-1 font-mono text-[10px] text-slate-300 scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent">
+                <!-- Logs -->
              </div>
-             <div class="text-[10px] font-mono text-slate-600">socket.io</div>
-           </div>
-           
-           <div id="console_log" class="flex-1 overflow-y-auto p-4 space-y-1 font-mono text-[10px] text-slate-300 scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent">
-              <!-- Logs -->
-           </div>
-       </div>
+         </div>
+      </div>
 
     </div>
+  </div>
 
-  </div> <!-- End Grid -->
+  <!-- SECTION 2: API Protocol -->
+  <div class="space-y-3">
+    <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest px-1">Section 2: REST API Protocol</h4>
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+      <!-- Left: API Input -->
+      <div class="lg:col-span-4">
+         <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden h-full">
+           <div class="bg-slate-50 px-4 py-2 border-b border-slate-200 flex items-center justify-between">
+              <h5 class="text-xs font-bold text-slate-700 uppercase tracking-widest">HTTP Request</h5>
+              <div class="text-[10px] font-mono text-slate-400">POST</div>
+          </div>
+           <div class="p-4 space-y-3">
+               <div>
+                  <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Hostname <span class="text-red-500">*</span></label>
+                  <input type="text" id="_api_hostname" class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded text-xs focus:ring-1 focus:ring-green-500 focus:border-green-500 outline-none transition-all" value="localhost">
+               </div>
+                <div class="grid grid-cols-2 gap-3">
+                   <div>
+                      <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Filter Exam</label>
+                      <input type="text" id="_api_examId" class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded text-xs focus:ring-1 focus:ring-green-500 focus:border-green-500 outline-none transition-all" placeholder="Optional">
+                   </div>
+                   <div>
+                      <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Filter Group</label>
+                      <input type="text" id="_api_examGroupId" class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded text-xs focus:ring-1 focus:ring-green-500 focus:border-green-500 outline-none transition-all" placeholder="Optional">
+                   </div>
+               </div>
+               <div>
+                  <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Filter Details (a,b,c)</label>
+                   <input type="text" id="_api_examDetailsId" class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded text-xs focus:ring-1 focus:ring-green-500 focus:border-green-500 outline-none transition-all" placeholder="Optional">
+               </div>
+               
+               <button onclick="test_api()" class="w-full mt-2 bg-white hover:bg-green-50 text-slate-700 border border-slate-300 hover:border-green-300 text-xs font-bold py-2.5 rounded transition-all shadow-sm flex items-center justify-center gap-2 active:scale-[0.98]">
+                   Fetch Records
+               </button>
+           </div>
+         </div>
+      </div>
+
+      <!-- Right: API Results -->
+      <div class="lg:col-span-8">
+         <div class="bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col h-[320px] overflow-hidden">
+             <div class="px-4 py-2 border-b border-slate-200 bg-slate-50 flex justify-between items-center">
+               <h5 class="text-xs font-bold text-slate-700 uppercase tracking-widest">HTTP Response Body</h5>
+               <span class="text-[10px] font-bold text-slate-400 bg-slate-200 px-2 py-0.5 rounded-full" id="result-status">Ready</span>
+             </div>
+             
+             <div class="flex-1 overflow-auto bg-slate-50/50 p-0" id="api_results_container">
+                  <!-- Empty State -->
+                  <div class="h-full flex flex-col items-center justify-center text-slate-300">
+                      <svg class="w-12 h-12 mb-3 opacity-25" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/></svg>
+                      <span class="text-xs font-medium">No Data Fetched</span>
+                  </div>
+             </div>
+         </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
 
 <script>
   // Log Helper
@@ -212,7 +224,7 @@
       answer: document.querySelector("#_answer").value,
     };
     socket.emit("answer_by_student", payload);
-    handle_log(`Sent Q${payload.questionId}: ${payload.answer}`, "out");
+    handle_log(`Emit: Q${payload.questionId} = ${payload.answer}`, "out");
   }
 
   // API Test
@@ -233,7 +245,9 @@
       const resultsContainer = document.getElementById('api_results_container');
       const statusLabel = document.getElementById('result-status');
       
-      resultsContainer.classList.add('opacity-50'); // loading state
+      resultsContainer.classList.add('opacity-50'); 
+      statusLabel.innerText = "Fetching...";
+      statusLabel.className = "text-[10px] font-bold text-blue-500 bg-blue-100 px-2 py-0.5 rounded-full";
 
       try {
           const res = await fetch(`/answers/${studentId}`, {
@@ -246,21 +260,22 @@
           resultsContainer.classList.remove('opacity-50');
 
           if (res.ok) {
-              handle_log(`Success: Loaded ${Object.keys(data).length} items`, "in");
-              statusLabel.innerText = `${Object.keys(data).length} Records Found`;
+              const count = Object.keys(data).length;
+              handle_log(`Success: ${count} records`, "in");
+              statusLabel.innerText = `${count} Records`;
+              statusLabel.className = "text-[10px] font-bold text-green-600 bg-green-100 px-2 py-0.5 rounded-full";
               
-              // Render Grid
-              if (Object.keys(data).length === 0) {
-                 resultsContainer.innerHTML = `<div class="p-8 text-center text-slate-400 text-xs">No answers found for these filters.</div>`;
+              if (count === 0) {
+                 resultsContainer.innerHTML = `<div class="h-full flex items-center justify-center text-slate-400 text-xs">No records found.</div>`;
                  return;
               }
 
-              let html = `<div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-px bg-slate-200 border border-slate-200">`;
+              let html = `<div class="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 gap-px bg-slate-200 border border-slate-200">`;
               for (const [qid, ans] of Object.entries(data)) {
                   html += `
-                    <div class="bg-white p-2 flex flex-col items-center justify-center hover:bg-blue-50 transition-colors cursor-default" title="Question: ${qid}">
-                        <div class="text-[9px] text-slate-400 uppercase font-bold tracking-wider">Q ${qid}</div>
-                        <div class="text-sm font-bold text-slate-700">${ans}</div>
+                    <div class="bg-white p-2 flex flex-col items-center justify-center hover:bg-blue-50 transition-colors cursor-default h-12" title="Question: ${qid}">
+                        <div class="text-[8px] text-slate-400 uppercase font-bold tracking-wider">Q${qid}</div>
+                        <div class="text-xs font-bold text-slate-700">${ans}</div>
                     </div>
                   `;
               }
@@ -269,13 +284,16 @@
 
           } else {
               handle_log(`Error: ${data.error}`, "in");
-              statusLabel.innerText = "Error Fetching Data";
-              resultsContainer.innerHTML = `<div class="p-4 text-red-500 text-xs font-mono bg-red-50 border-l-2 border-red-500">${data.error}</div>`;
+              statusLabel.innerText = "Error";
+              statusLabel.className = "text-[10px] font-bold text-red-600 bg-red-100 px-2 py-0.5 rounded-full";
+              resultsContainer.innerHTML = `<div class="p-4 text-red-500 text-xs font-mono bg-red-50 border-l-2 border-red-500 m-4">${data.error}</div>`;
           }
       } catch (e) {
           resultsContainer.classList.remove('opacity-50');
-          handle_log(`Network Error`, "in");
-          resultsContainer.innerHTML = `<div class="p-4 text-red-500 text-xs font-mono">Network Error: ${e}</div>`;
+          handle_log(`Net Error`, "in");
+          statusLabel.innerText = "Net Error";
+          statusLabel.className = "text-[10px] font-bold text-red-600 bg-red-100 px-2 py-0.5 rounded-full";
+          resultsContainer.innerHTML = `<div class="p-4 text-red-500 text-xs font-mono m-4">Network Error: ${e}</div>`;
       }
   }
 </script>
