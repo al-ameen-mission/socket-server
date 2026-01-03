@@ -147,3 +147,10 @@ export const getAnswers = (folderPath: string, studentId: string | number): Reco
     }
     return result;
 }
+
+export const getDbStats = () => {
+    return {
+        openConnections: dbCache.size,
+        maxConnections: MAX_OPEN_DBS
+    };
+};

@@ -10,9 +10,34 @@
 
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
     
-    <!-- Input Panel -->
-    <div class="bg-white rounded-xl shadow-lg border border-slate-100 p-6">
-      <h5 class="text-lg font-semibold text-slate-800 mb-4 pb-2 border-b border-slate-100">Test Parameters</h5>
+    <!-- Left Column -->
+    <div class="space-y-6">
+        
+       <!-- Stats Panel (New) -->
+       <div class="bg-white rounded-xl shadow-lg border border-slate-100 p-6 relative overflow-hidden">
+         <div class="absolute top-0 left-0 w-1 h-full bg-blue-500"></div>
+         <h5 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4">System Monitor</h5>
+         
+         <div class="grid grid-cols-3 gap-4 text-center divide-x divide-slate-100">
+             <div>
+                <div class="text-2xl font-bold text-slate-800" id="stat-queue">0</div>
+                <div class="text-xs text-slate-400">Queue Buffer</div>
+             </div>
+             <div>
+                <div class="text-2xl font-bold text-slate-800" id="stat-db">0</div>
+                <div class="text-xs text-slate-400">Open DBs</div>
+             </div>
+              <div>
+                <div class="text-2xl font-bold text-slate-800" id="stat-mem">0</div>
+                <div class="text-xs text-slate-400">RAM (MB)</div>
+             </div>
+         </div>
+       </div>
+
+      <!-- Input Panel -->
+      <div class="bg-white rounded-xl shadow-lg border border-slate-100 p-6">
+        <!-- ... existing inputs ... -->
+        <h5 class="text-lg font-semibold text-slate-800 mb-4 pb-2 border-b border-slate-100">Test Parameters</h5>
       
       <div class="space-y-4">
         
@@ -62,9 +87,11 @@
 
       </div>
     </div>
+    </div>
 
-    <!-- Logs Panel -->
-    <div class="bg-white rounded-xl shadow-lg border border-slate-100 flex flex-col h-full max-h-[600px]">
+    <!-- Logs Panel (Right Column) -->
+    <div class="bg-white rounded-xl shadow-lg border border-slate-100 flex flex-col h-full max-h-[800px]">
+       <!-- ... logs ... -->
        <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50 rounded-t-xl">
           <h5 class="text-sm font-semibold text-slate-600 uppercase tracking-wider">Live Logs</h5>
           <span class="flex h-3 w-3 relative">
@@ -79,11 +106,12 @@
     </div>
 
   </div>
-</div>
 
 <script>
+  // ... (existing log logic) ...
   // Helper: Append log
   function handle_log(msg, type='in'){
+      // ... same logic ...
       const now = new Date().toLocaleTimeString();
       const colorClass = type === 'in' ? 'text-green-600' : 'text-blue-600';
       const arrow = type === 'in' ? '←' : '→';
@@ -101,16 +129,32 @@
       container.scrollTop = container.scrollHeight;
   }
 
+  // Monitor Polling
+  async function updateStats() {
+      try {
+          const res = await fetch('/stats');
+          const data = await res.json();
+          document.getElementById('stat-queue').innerText = data.queue.bufferSize;
+          document.getElementById('stat-db').innerText = data.database.openConnections;
+          document.getElementById('stat-mem').innerText = data.memory.rss;
+      } catch (err) {
+         // silent fail
+      }
+  }
+  setInterval(updateStats, 2000);
+  updateStats(); // init
+
+  // ... (socket init) ...
   // Socket Init
   handle_log("Initializing socket connection...", "out");
   
-  // Note: we use io() directly if served from same domain, or use the injected URL
   const socketUrl = "{{ SOCKET_IO_URL }}" || window.location.origin;
   const socket = io(socketUrl, {
     path: "/io",
     transports: ['websocket', 'polling'] 
   });
-
+  
+  // ... rest of socket logic ...
   socket.on("connect", () => {
      handle_log(`Socket Connected (ID: ${socket.id})`, "in");
   });
@@ -137,6 +181,7 @@
     socket.emit("answer_by_student", payload);
     handle_log(`Sent Answer: Q${payload.questionId} = ${payload.answer}`, "out");
   }
+
 
 </script>
 {% endblock %}

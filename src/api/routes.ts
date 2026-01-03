@@ -33,4 +33,26 @@ router.get('/answers/:studentId', (req: Request, res: Response) => {
     }
 });
 
+router.get('/stats', (req, res) => {
+    try {
+        const dbStats = require('../database/manager').getDbStats();
+        const queueStats = require('../services/submission.service').submissionService.getQueueStats();
+        const memUsage = process.memoryUsage();
+
+        res.json({
+            database: dbStats,
+            queue: queueStats,
+            memory: {
+                rss: Math.round(memUsage.rss / 1024 / 1024), // MB
+                heapUsed: Math.round(memUsage.heapUsed / 1024 / 1024), // MB
+                external: Math.round(memUsage.external / 1024 / 1024), // MB
+            },
+            uptime: process.uptime()
+        });
+    } catch (e) {
+        logger.error(`Error in /stats: ${e}`);
+        res.status(500).json({ error: 'Stats error' });
+    }
+});
+
 export default router;

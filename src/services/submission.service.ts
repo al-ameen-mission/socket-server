@@ -45,6 +45,10 @@ class BatchQueue<T> {
             logger.error(`Queue processing failed: ${e}`);
         }
     }
+
+    public get size(): number {
+        return this.buffer.size;
+    }
 }
 
 // Service
@@ -98,6 +102,11 @@ class SubmissionService {
                 logger.error(`Failed to write batch to ${folderPath}: ${e}`);
             }
         }
+    }
+    public getQueueStats() {
+        return {
+            bufferSize: this.queue.size
+        };
     }
 }
 
