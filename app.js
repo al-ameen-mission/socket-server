@@ -5,7 +5,7 @@ let cookieParser = require('cookie-parser');
 let lessMiddleware = require('less-middleware');
 let logger = require('morgan');
 
-const {logError, rollbar} = require("./lib/log");
+const {logError} = require("./lib/log");
 
 let app = express();
 
@@ -44,6 +44,6 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-app.use(rollbar.errorHandler());
+
 
 module.exports = app;

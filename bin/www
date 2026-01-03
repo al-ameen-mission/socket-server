@@ -11,7 +11,7 @@ if(process.env.NODE_ENV==="development"){
   require('dotenv').config();
 }
 
-let {logError, logDebug, logInfo, rollbar} = require("../lib/log");
+let {logError, logDebug, logInfo} = require("../lib/log");
 
 /**
  * Get port from environment and store in Express.
