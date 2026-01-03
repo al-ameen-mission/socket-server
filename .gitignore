@@ -2,3 +2,4 @@
 /.env
 /.env.devlopment
 /package-lock.json
+logs/
