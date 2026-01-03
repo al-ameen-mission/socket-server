@@ -55,6 +55,9 @@ class BatchQueue<T> {
 class SubmissionService {
     private queue: BatchQueue<StudentRequest>;
     private totalSaves: number = 0;
+    private tps: number = 0;
+    private lastTotalSaves: number = 0;
+    private lastTpsCheck: number = Date.now();
 
     constructor() {
         // Init Queue: Batch 100 items or flush every 2s
@@ -64,6 +67,17 @@ class SubmissionService {
             this.processBatch.bind(this),
             (req) => `${req.studentId}_${req.questionId}` // Key for deduplication
         );
+
+        // TPS Calculation every 2 seconds
+        setInterval(() => {
+            const now = Date.now();
+            const deltaSaves = this.totalSaves - this.lastTotalSaves;
+            const deltaTimeS = (now - this.lastTpsCheck) / 1000;
+            
+            this.tps = Math.round(deltaSaves / deltaTimeS);
+            this.lastTotalSaves = this.totalSaves;
+            this.lastTpsCheck = now;
+        }, 2000).unref();
     }
 
     public enqueue(req: StudentRequest) {
@@ -110,7 +124,8 @@ class SubmissionService {
     public getQueueStats() {
         return {
             bufferSize: this.queue.size,
-            totalSaves: this.totalSaves
+            totalSaves: this.totalSaves,
+            tps: this.tps
         };
     }
 }
