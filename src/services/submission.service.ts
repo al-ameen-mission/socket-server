@@ -56,10 +56,10 @@ class SubmissionService {
     private queue: BatchQueue<StudentRequest>;
 
     constructor() {
-        // Init Queue: Batch 100 items or flush every 5s
+        // Init Queue: Batch 100 items or flush every 2s
         this.queue = new BatchQueue<StudentRequest>(
             100, 
-            5000, 
+            2000, 
             this.processBatch.bind(this),
             (req) => `${req.studentId}_${req.questionId}` // Key for deduplication
         );
