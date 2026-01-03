@@ -12,8 +12,7 @@ if(process.env.NODE_ENV==="development"){
 }
 
 let {logError, logDebug, logInfo, rollbar} = require("../lib/log");
-//mysql
-//const models = require('./../models');
+
 /**
  * Get port from environment and store in Express.
  */
