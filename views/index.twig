@@ -93,32 +93,50 @@
   <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
     
     <!-- Socket Form -->
-    <div class="lg:col-span-4 card-premium overflow-hidden">
+    <div class="lg:col-span-3 card-premium overflow-hidden">
       <div class="px-4 py-2.5 bg-slate-50 border-b border-slate-100 flex items-center justify-between">
         <h2 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Socket Emitter</h2>
         <span class="text-[9px] bg-emerald-100 text-emerald-700 font-bold px-2 py-0.5 rounded">Real-time</span>
       </div>
       <div class="p-4 space-y-3">
          <div class="grid grid-cols-2 gap-3">
-            <input type="text" id="_examId" placeholder="Exam ID" class="input-clean w-full px-2.5 py-1.5 rounded-md" value="1">
-            <input type="text" id="_exam_group_id" placeholder="Group ID" class="input-clean w-full px-2.5 py-1.5 rounded-md" value="1">
+            <div class="space-y-1">
+               <label class="text-[10px] font-bold text-slate-400 uppercase ml-1">Exam ID</label>
+               <input type="text" id="_examId" placeholder="ID" class="input-clean w-full px-2.5 py-1.5 rounded-md" value="1">
+            </div>
+            <div class="space-y-1">
+               <label class="text-[10px] font-bold text-slate-400 uppercase ml-1">Group ID</label>
+               <input type="text" id="_exam_group_id" placeholder="ID" class="input-clean w-full px-2.5 py-1.5 rounded-md" value="1">
+            </div>
          </div>
          <div class="grid grid-cols-2 gap-3">
-            <input type="text" id="_examdetailsId" placeholder="Details ID" class="input-clean w-full px-2.5 py-1.5 rounded-md" value="1">
-            <input type="text" id="_historyId" placeholder="History ID" class="input-clean w-full px-2.5 py-1.5 rounded-md" value="1">
+            <div class="space-y-1">
+               <label class="text-[10px] font-bold text-slate-400 uppercase ml-1">Details ID</label>
+               <input type="text" id="_examdetailsId" placeholder="ID" class="input-clean w-full px-2.5 py-1.5 rounded-md" value="1">
+            </div>
+            <div class="space-y-1">
+               <label class="text-[10px] font-bold text-slate-400 uppercase ml-1">History</label>
+               <input type="text" id="_historyId" placeholder="ID" class="input-clean w-full px-2.5 py-1.5 rounded-md" value="1">
+            </div>
          </div>
          <div class="flex gap-3">
-            <input type="text" id="_questionId" placeholder="Question" class="input-clean flex-1 px-2.5 py-1.5 rounded-md" value="1">
-            <input type="text" id="_answer" placeholder="Ans" class="input-clean w-16 px-2.5 py-1.5 rounded-md text-center font-bold text-indigo-600" value="A">
+            <div class="flex-1 space-y-1">
+               <label class="text-[10px] font-bold text-slate-400 uppercase ml-1">Question</label>
+               <input type="text" id="_questionId" placeholder="No" class="input-clean w-full px-2.5 py-1.5 rounded-md" value="1">
+            </div>
+            <div class="w-16 space-y-1">
+               <label class="text-[10px] font-bold text-slate-400 uppercase ml-1">Ans</label>
+               <input type="text" id="_answer" placeholder="-" class="input-clean w-full px-2.5 py-1.5 rounded-md text-center font-bold text-indigo-600" value="A">
+            </div>
          </div>
-         <button onclick="save_text_answer()" class="btn-primary w-full py-2 rounded-md text-[11px] font-bold shadow-sm">
+         <button onclick="save_text_answer()" class="btn-primary w-full py-2 mt-1 rounded-md text-[11px] font-bold shadow-sm">
             Emit Answer
          </button>
       </div>
     </div>
 
     <!-- Live Logs -->
-    <div class="lg:col-span-8 card-premium flex flex-col h-[280px] overflow-hidden">
+    <div class="lg:col-span-9 card-premium flex flex-col h-[280px] overflow-hidden">
       <div class="px-4 py-2 bg-slate-50 border-b border-slate-100 flex items-center justify-between">
          <h2 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest text-[#000]">Socket Stream</h2>
          <button onclick="document.getElementById('console_log').innerHTML=''" class="text-[9px] font-bold text-slate-300 hover:text-slate-500">CLEAR</button>
@@ -134,25 +152,34 @@
   <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
     
     <!-- API Form -->
-    <div class="lg:col-span-4 card-premium overflow-hidden border-indigo-100 shadow-indigo-100/20">
+    <div class="lg:col-span-3 card-premium overflow-hidden border-indigo-100 shadow-indigo-100/20">
       <div class="px-4 py-2.5 bg-indigo-50 border-b border-indigo-100 flex items-center justify-between">
         <h2 class="text-[10px] font-bold text-indigo-600 uppercase tracking-widest">REST Inspector</h2>
         <span class="text-[9px] font-mono font-bold text-indigo-400">POST</span>
       </div>
       <div class="p-4 space-y-3">
          <div class="grid grid-cols-2 gap-3">
-            <input type="text" id="_api_examId" placeholder="Filter Exam" class="input-clean w-full px-2.5 py-1.5 rounded-md">
-            <input type="text" id="_api_examGroupId" placeholder="Filter Group" class="input-clean w-full px-2.5 py-1.5 rounded-md">
+            <div class="space-y-1">
+               <label class="text-[10px] font-bold text-slate-400 uppercase ml-1">Exam ID</label>
+               <input type="text" id="_api_examId" placeholder="Filter" class="input-clean w-full px-2.5 py-1.5 rounded-md">
+            </div>
+            <div class="space-y-1">
+               <label class="text-[10px] font-bold text-slate-400 uppercase ml-1">Group ID</label>
+               <input type="text" id="_api_examGroupId" placeholder="Filter" class="input-clean w-full px-2.5 py-1.5 rounded-md">
+            </div>
          </div>
-         <input type="text" id="_api_examDetailsId" placeholder="Filter Details (CSV: 101, 102)" class="input-clean w-full px-2.5 py-1.5 rounded-md">
-         <button onclick="test_api()" class="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md text-[11px] font-bold shadow-md shadow-indigo-600/10">
+         <div class="space-y-1">
+            <label class="text-[10px] font-bold text-slate-400 uppercase ml-1">Details Context (CSV)</label>
+            <input type="text" id="_api_examDetailsId" placeholder="e.g. 101, 102" class="input-clean w-full px-2.5 py-1.5 rounded-md">
+         </div>
+         <button onclick="test_api()" class="w-full py-2 mt-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md text-[11px] font-bold shadow-md shadow-indigo-600/10">
             Fetch Archive
          </button>
       </div>
     </div>
 
     <!-- Results Table -->
-    <div class="lg:col-span-8 card-premium flex flex-col h-[320px] overflow-hidden">
+    <div class="lg:col-span-9 card-premium flex flex-col h-[320px] overflow-hidden">
         <div class="px-4 py-2.5 bg-slate-50 border-b border-slate-100 flex justify-between items-center">
            <h2 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Data Store Explorer</h2>
            <span id="result-status" class="text-[9px] font-bold bg-white text-slate-400 px-2 py-0.5 border border-slate-200 rounded">Ready</span>
