@@ -2,146 +2,141 @@
 
 {% block body %}
 
-  <div class="uk-container uk-margin-auto ">
-    <h3>Examination Test Panel</h3>
-    <div class="uk-card-small uk-card-default uk-margin">
-      <div class="uk-card-body">
-
-        <div class="uk-form-horizontal">
-          <div class="uk-margin">
-            <label class="uk-form-label">Student ID</label>
-            <div class="uk-form-controls">
-              <input type="text" id="_studentId" class="uk-input uk-form-small" value="1" placeholder="Student ID">
-            </div>
-          </div>
-          <div class="uk-margin">
-            <label class="uk-form-label">History ID</label>
-            <div class="uk-form-controls">
-              <input type="text" id="_historyId" class="uk-input uk-form-small" value="1" placeholder="History ID">
-
-            </div>
-          </div>
-          <div class="uk-margin">
-            <label class="uk-form-label">Exam ID</label>
-            <div class="uk-form-controls">
-              <input type="text" id="_examId" class="uk-input uk-form-small" value="1" placeholder="Exam Group ID">
-            </div>
-          </div>
-          <div class="uk-margin">
-            <label class="uk-form-label">Exam Group ID</label>
-            <div class="uk-form-controls">
-              <input type="text" id="_exam_group_id" class="uk-input uk-form-small" value="1" placeholder="Exam Group ID">
-            </div>
-          </div>
-
-          <div class="uk-margin">
-            <label class="uk-form-label">Exam Details ID</label>
-            <div class="uk-form-controls">
-              <input type="text" id="_examdetailsId" class="uk-input uk-form-small" value="1" placeholder="Exam Group ID">
-            </div>
-          </div>
-
-          <div class="uk-margin">
-            <label class="uk-form-label">Question ID</label>
-            <div class="uk-form-controls">
-              <input type="text" id="_questionId" class="uk-input uk-form-small" value="1" placeholder="Exam Group ID">
-            </div>
-          </div>
-
-          <div class="uk-margin">
-            <label class="uk-form-label">Answer</label>
-            <div class="uk-form-controls">
-              <input type="text" id="_answer" class="uk-input uk-form-small" value="1" placeholder="Exam Group ID">
-            </div>
-          </div>
-        </div>
-        <div class="uk-margin" >
-          <button
-                  onclick="save_text_answer()"
-                  class="uk-button uk-button-secondary uk-button-small">SEND ANSWER</button>
-        </div>
-      </div>
-    </div>
-    <div class="uk-margin">
-      <div class="uk-card uk-card-default uk-card-small">
-        <div class="uk-card-header">
-          <h5>Log</h5>
-        </div>
-        <div class="uk-card-body  " >
-
-          <div id="console_log" class="uk-height-medium uk-overflow-auto">
-
-          </div>
-        </div>
-      </div>
-
-    </div>
+<div class="max-w-5xl mx-auto p-6 md:p-12">
+  <div class="mb-8">
+    <h3 class="text-2xl font-bold text-slate-900">Examination Test Panel</h3>
+    <p class="text-slate-500">Real-time socket communication console</p>
   </div>
-  <script>
 
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    
+    <!-- Input Panel -->
+    <div class="bg-white rounded-xl shadow-lg border border-slate-100 p-6">
+      <h5 class="text-lg font-semibold text-slate-800 mb-4 pb-2 border-b border-slate-100">Test Parameters</h5>
+      
+      <div class="space-y-4">
+        
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">Student ID</label>
+          <input type="text" id="_studentId" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm" value="1" placeholder="Student ID">
+        </div>
 
-    handle_log("trying to connecting socket server.", "out");
-    let socket = io("{{ SOCKET_IO_URL }}",{
-      path: "/io",
-    });
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1">History ID</label>
+            <input type="text" id="_historyId" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm" value="1" placeholder="History ID">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1">Exam ID</label>
+            <input type="text" id="_examId" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm" value="1" placeholder="Exam ID">
+          </div>
+        </div>
 
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+             <label class="block text-sm font-medium text-slate-700 mb-1">Exam Group ID</label>
+             <input type="text" id="_exam_group_id" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm" value="1" placeholder="Exam Group ID">
+          </div>
+          <div>
+             <label class="block text-sm font-medium text-slate-700 mb-1">Details ID</label>
+             <input type="text" id="_examdetailsId" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm" value="1" placeholder="Details ID">
+          </div>
+        </div>
 
-    socket.on("log",(req)=>{
-      handle_log(req);
-    })
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+             <label class="block text-sm font-medium text-slate-700 mb-1">Question ID</label>
+             <input type="text" id="_questionId" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm" value="1" placeholder="Q ID">
+          </div>
+           <div>
+             <label class="block text-sm font-medium text-slate-700 mb-1">Answer</label>
+             <input type="text" id="_answer" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm" value="A" placeholder="Answer option">
+          </div>
+        </div>
 
-    function get_random(min=1111, max=9999){
-      return Math.floor((Math.random() * max) + min);
-    }
+        <div class="pt-4">
+          <button onclick="save_text_answer()" class="w-full bg-primary hover:bg-blue-700 text-white font-medium py-2.5 rounded-lg shadow-md hover:shadow-lg transition-all active:scale-[0.98]">
+            Send Answer Payload
+          </button>
+        </div>
 
-    function save_text_answer(){
-      socket.emit("answer_by_student", {
-        examId    : document.querySelector("#_examId").value,
-        exam_group_id  : document.querySelector("#_exam_group_id").value,
-        examdetailsId:document.querySelector("#_examdetailsId").value,
-        studentId : document.querySelector("#_studentId").value,
-        questionId:document.querySelector("#_questionId").value,
-        historyId:document.querySelector("#_historyId").value,
-        answer : document.querySelector("#_answer").value,
-      });
-      handle_log("student answer sent", "out");
-    }
+      </div>
+    </div>
 
-    function save_random_text_answer(){
-      setInterval(function (){
-        socket.emit("answer_by_student", {
-          examId    : get_random(),
-          exam_group_id  : get_random(),
-          examdetailsId: get_random(),
-          studentId : get_random(),
-          questionId: get_random(),
-          historyId: get_random(),
-          answer : get_random(),
-        },100);
-      })
-      handle_log("student answer sent", "out");
-    }
-    //save_random_text_answer();
+    <!-- Logs Panel -->
+    <div class="bg-white rounded-xl shadow-lg border border-slate-100 flex flex-col h-full max-h-[600px]">
+       <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50 rounded-t-xl">
+          <h5 class="text-sm font-semibold text-slate-600 uppercase tracking-wider">Live Logs</h5>
+          <span class="flex h-3 w-3 relative">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+          </span>
+       </div>
+       
+       <div id="console_log" class="flex-1 overflow-y-auto p-4 space-y-2 bg-slate-50 font-mono text-xs">
+          <!-- Logs injected here -->
+       </div>
+    </div>
 
+  </div>
+</div>
 
-    function handle_log(req, typ='in'){
-      let now = new Date().toLocaleString().replace(",","").replace(/:.. /," ");
+<script>
+  // Helper: Append log
+  function handle_log(msg, type='in'){
+      const now = new Date().toLocaleTimeString();
+      const colorClass = type === 'in' ? 'text-green-600' : 'text-blue-600';
+      const arrow = type === 'in' ? '←' : '→';
+      
+      const el = document.createElement('div');
+      el.className = `flex gap-2 items-start border-b border-slate-100 pb-1 last:border-0`;
+      el.innerHTML = `
+        <span class="text-slate-400 shrink-0">[${now}]</span>
+        <span class="${colorClass} font-bold">${arrow}</span>
+        <span class="text-slate-700 break-all">${msg}</span>
+      `;
 
-      let con = '';
-      if(typ==="in"){
-        con = `<p class="uk-margin-remove" style="color: black; padding-bottom: 3px">
-            <small>[${now}] <span class="uk-text-success">${req}</span></small>
-        </p>`;
-      } else {
-        con = `<p class="uk-margin-remove" style="color: black; padding-bottom: 3px">
-            <small>[${now}] <span class="uk-text-warning">${req}</span></small>
-        </p>`;
-      }
+      const container = document.querySelector("#console_log");
+      container.appendChild(el);
+      container.scrollTop = container.scrollHeight;
+  }
 
-      document.querySelector("#console_log").innerHTML += con;
-      document.querySelector("#console_log").scrollTop = document.querySelector("#console_log").scrollHeight;
-    }
+  // Socket Init
+  handle_log("Initializing socket connection...", "out");
+  
+  // Note: we use io() directly if served from same domain, or use the injected URL
+  const socketUrl = "{{ SOCKET_IO_URL }}" || window.location.origin;
+  const socket = io(socketUrl, {
+    path: "/io",
+    transports: ['websocket', 'polling'] 
+  });
 
-  </script>
+  socket.on("connect", () => {
+     handle_log(`Socket Connected (ID: ${socket.id})`, "in");
+  });
 
+  socket.on("disconnect", () => {
+     handle_log("Socket Disconnected", "in");
+  });
+
+  socket.on("log", (msg) => {
+    handle_log(msg, "in");
+  });
+
+  function save_text_answer(){
+    const payload = {
+      examId: document.querySelector("#_examId").value,
+      exam_group_id: document.querySelector("#_exam_group_id").value,
+      examdetailsId: document.querySelector("#_examdetailsId").value,
+      studentId: document.querySelector("#_studentId").value,
+      questionId: document.querySelector("#_questionId").value,
+      historyId: document.querySelector("#_historyId").value,
+      answer: document.querySelector("#_answer").value,
+    };
+    
+    socket.emit("answer_by_student", payload);
+    handle_log(`Sent Answer: Q${payload.questionId} = ${payload.answer}`, "out");
+  }
+
+</script>
 {% endblock %}

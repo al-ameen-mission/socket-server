@@ -7,14 +7,27 @@ import fs from 'fs';
 
 export const handleConnection = (socket: Socket) => {
     // 1. Handshake & Context Resolution
+    let domain: string;
     const referer = socket.handshake.headers.referer;
-    if (!referer) {
-        logger.warn(`Connection rejected: No referer (ID: ${socket.id})`);
-        socket.disconnect();
-        return;
-    }
 
-    const domain = new URL(referer).hostname;
+    if (referer) {
+        try {
+            domain = new URL(referer).hostname;
+        } catch (e) {
+            domain = 'unknown';
+        }
+    } else {
+        // Fallback to Host header (often present in handshake)
+        const host = socket.handshake.headers.host;
+        if (host) {
+            domain = host.split(':')[0]; // Strip port if present
+        } else {
+            logger.warn(`Connection rejected: No referer or host (ID: ${socket.id})`);
+            socket.disconnect();
+            return;
+        }
+    }
+    
     // Context Resolution
     const answerPath = config.ANSWER_PATH.replace('{domain}', domain);
 
