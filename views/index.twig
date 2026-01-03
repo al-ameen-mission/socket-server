@@ -206,6 +206,9 @@
   setInterval(updateStats, 2000);
   updateStats(); 
 
+  // Initialize defaults
+  document.getElementById('_api_hostname').value = window.location.hostname;
+
   // Socket
   const socketUrl = "{{ SOCKET_IO_URL }}" || window.location.origin;
   const socket = io(socketUrl, { path: "/io", transports: ['websocket', 'polling'] });
