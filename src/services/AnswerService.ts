@@ -1,5 +1,5 @@
 import { upsertBatchAnswers } from "../lib/db";
-import { logDebug, logError } from "../lib/log";
+import { logger } from "../lib/log";
 import { Queue } from "../lib/queue";
 import { StudentRequest, AnswerRecord } from "../types";
 
@@ -30,7 +30,7 @@ class AnswerService {
 
         for (const req of batch) {
             if (!req.answer_path) {
-                logError('Missing answer_path in request');
+                logger.error('Missing answer_path in request');
                 continue;
             }
             if (!domainBatches.has(req.answer_path)) {
@@ -50,9 +50,9 @@ class AnswerService {
 
             try {
                 upsertBatchAnswers(folderPath, records);
-                logDebug(`Saved ${records.length} answers to ${folderPath}/data.db`);
+                logger.debug(`Saved ${records.length} answers to ${folderPath}/data.db`);
             } catch (err) {
-                logError(`Failed to save batch for ${folderPath}: ${err}`);
+                logger.error(`Failed to save batch for ${folderPath}: ${err}`);
             }
         }
     }

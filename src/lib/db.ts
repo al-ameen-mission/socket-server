@@ -1,6 +1,6 @@
 import Database from 'better-sqlite3';
 import path from 'path';
-import { logError, logInfo } from './log';
+import { logger } from './log';
 import fs from 'fs';
 
 import { AnswerRecord } from '../types';
@@ -53,11 +53,11 @@ export const getDatabase = (folderPath: string): DbInstance => {
       }
     }
     if (oldestKey) {
-      logInfo(`Closing inactive DB: ${oldestKey}`);
+      logger.info(`Closing inactive DB: ${oldestKey}`);
       try {
         dbCache.get(oldestKey)?.db.close();
       } catch (e) {
-        logError(`Error closing DB ${oldestKey}: ${e}`);
+        logger.error(`Error closing DB ${oldestKey}: ${e}`);
       }
       dbCache.delete(oldestKey);
     }
@@ -71,7 +71,7 @@ export const getDatabase = (folderPath: string): DbInstance => {
   }
 
   const dbPath = path.join(folderPath, 'data.db');
-  logInfo(`Opening/Creating DB at ${dbPath}`);
+  logger.info(`Opening/Creating DB at ${dbPath}`);
   
   const db = new Database(dbPath);
   db.pragma('journal_mode = WAL');
@@ -117,7 +117,7 @@ export const upsertBatchAnswers = (folderPath: string, records: AnswerRecord[]) 
   try {
     insertMany(records);
   } catch (err) {
-    logError(`Batch Insert Failed for ${folderPath}: ${err}`);
+    logger.error(`Batch Insert Failed for ${folderPath}: ${err}`);
     throw err;
   }
 };
@@ -135,7 +135,7 @@ export const getStudentAnswers = (folderPath: string, studentId: string | number
     }
     return answerMap;
   } catch (err) {
-    logError(`Get Answers Failed for ${folderPath}: ${err}`);
+    logger.error(`Get Answers Failed for ${folderPath}: ${err}`);
     return {};
   }
 };
