@@ -3,6 +3,7 @@ import config from '../config/env';
 import { getAnswers } from '../database/manager';
 import { logger } from '../utils/logger';
 import fs from 'fs';
+import { io } from '../socket';
 
 import { validate } from '../middleware/validate';
 import { answerFilterSchema } from './schemas';
@@ -51,10 +52,18 @@ router.get('/stats', (req, res) => {
         const dbStats = require('../database/manager').getDbStats();
         const queueStats = require('../services/submission.service').submissionService.getQueueStats();
         const memUsage = process.memoryUsage();
+        const cpuUsage = process.cpuUsage();
 
         res.json({
             database: dbStats,
             queue: queueStats,
+            sockets: {
+                connected: io ? io.engine.clientsCount : 0
+            },
+            cpu: {
+                user: Math.round(cpuUsage.user / 1000000), // Convert to seconds
+                system: Math.round(cpuUsage.system / 1000000)
+            },
             memory: {
                 rss: Math.round(memUsage.rss / 1024 / 1024), // MB
                 heapUsed: Math.round(memUsage.heapUsed / 1024 / 1024), // MB

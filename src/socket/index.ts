@@ -4,8 +4,10 @@ import config from '../config/env';
 import { logger } from '../utils/logger';
 import { handleConnection } from './handler';
 
+export let io: Server;
+
 export const initSocketServer = (httpServer: HttpServer) => {
-    const io = new Server(httpServer, {
+    io = new Server(httpServer, {
         path: '/io',
         allowEIO3: true, // Support legacy clients (v2/v3)
         cors: {

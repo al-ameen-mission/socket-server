@@ -73,7 +73,11 @@
           <label class="text-[9px] font-bold text-slate-400 uppercase">Hostname</label>
           <input type="text" id="_api_hostname" class="w-28 bg-transparent border-none p-0 text-xs font-bold text-slate-800 focus:ring-0">
        </div>
-       <div class="flex gap-4 px-3">
+        <div class="flex gap-4 px-3">
+           <div class="text-center">
+              <span class="text-[9px] font-bold text-slate-400 uppercase block">Sockets</span>
+              <span class="text-[11px] font-mono text-indigo-600 font-bold" id="stat-sockets">0</span>
+           </div>
            <div class="text-center">
               <span class="text-[9px] font-bold text-slate-400 uppercase block">Queue</span>
               <span class="text-[11px] font-mono text-indigo-600 font-bold" id="stat-queue">0</span>
@@ -83,10 +87,14 @@
               <span class="text-[11px] font-mono text-emerald-600 font-bold" id="stat-db">0</span>
            </div>
            <div class="text-center">
+              <span class="text-[9px] font-bold text-slate-400 uppercase block">CPU</span>
+              <span class="text-[11px] font-mono text-amber-600 font-bold" id="stat-cpu">0s</span>
+           </div>
+           <div class="text-center">
               <span class="text-[9px] font-bold text-slate-400 uppercase block">Memory</span>
               <span class="text-[11px] font-mono text-rose-600 font-bold" id="stat-mem">0</span>
            </div>
-       </div>
+        </div>
     </div>
   </div>
 
@@ -301,8 +309,10 @@
           const now = new Date().toLocaleTimeString('en-US', { hour12: false, minute: '2-digit', second: '2-digit' });
           
           // Update Numbers
+          document.getElementById('stat-sockets').innerText = data.sockets.connected;
           document.getElementById('stat-queue').innerText = data.queue.bufferSize;
           document.getElementById('stat-db').innerText = data.database.openConnections;
+          document.getElementById('stat-cpu').innerText = data.cpu.user + 's';
           document.getElementById('stat-mem').innerText = data.memory.rss + 'M';
 
           // Update Chart
