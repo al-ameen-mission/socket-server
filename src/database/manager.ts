@@ -108,14 +108,40 @@ const pruneOldestConnection = () => {
 
     if (oldestKey) {
         logger.info(`Pruning inactive DB connection: ${oldestKey}`);
-        try {
-            dbCache.get(oldestKey)?.db.close();
-        } catch (e) {
-            logger.error(`Failed to close DB ${oldestKey}: ${e}`);
-        }
-        dbCache.delete(oldestKey);
+        closeDatabase(oldestKey);
     }
 }
+
+const closeDatabase = (key: string) => {
+    try {
+        const instance = dbCache.get(key);
+        if (instance) {
+           instance.db.close();
+        }
+    } catch (e) {
+        logger.error(`Failed to close DB ${key}: ${e}`);
+    }
+    dbCache.delete(key);
+}
+
+// Automatic Cleanup of Idle Connections (TTL)
+const IDLE_TIMEOUT_MS = 30 * 60 * 1000; // 30 minutes
+const CLEANUP_INTERVAL_MS = 60 * 1000; // Check every minute
+
+setInterval(() => {
+    const now = Date.now();
+    let closedCount = 0;
+    
+    for (const [key, instance] of dbCache.entries()) {
+        if (now - instance.lastUsed > IDLE_TIMEOUT_MS) {
+            closeDatabase(key);
+            closedCount++;
+        }
+    }
+    if (closedCount > 0) {
+        logger.info(`TTL Cleanup: Closed ${closedCount} idle connections`);
+    }
+}, CLEANUP_INTERVAL_MS).unref(); // unref so it doesn't prevent app exit
 
 // --- Operations ---
 export const upsertBatch = (folderPath: string, records: AnswerRecord[]) => {
