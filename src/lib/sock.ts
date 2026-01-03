@@ -13,15 +13,82 @@ interface StudentRequest {
     answer: string;
     examdetailsId: string | number;
     endtimestamp?: number;
+    // Context added for processing
+    answer_path?: string;
+    domain?: string;
 }
 
 interface AnswerContent {
     [key: string | number]: any;
 }
 
-function InitSocketIO(server: HttpServer) {
-    let exam_queue: any = {};
+// Global Write Queue
+const writeQueue = new Queue<StudentRequest>({
+    batchSize: 100, // Larger batch size for global queue
+    batchTime: 5000,
+    key: (req) => `${req.studentId}_${req.questionId}`, // Deduplicate globally per student+question
+    processor: async (batch) => {
+        await processGlobalBatch(batch);
+    }
+});
 
+async function processGlobalBatch(batch: StudentRequest[]) {
+    // Group batch items by unique file path (studentId)
+    // Map<FilePath, Array<Request>>
+    const filesToUpdate = new Map<string, StudentRequest[]>();
+
+    for (const req of batch) {
+        if (!req.answer_path || !req.studentId) continue;
+        
+        let filename = req.studentId + ".json";
+        let filepath = `${req.answer_path}${filename}`;
+        
+        if (!filesToUpdate.has(filepath)) {
+            filesToUpdate.set(filepath, []);
+        }
+        filesToUpdate.get(filepath)!.push(req);
+    }
+
+    // Process each file sequentially (or safely parallel if IO permits, but let's stick to simple loop)
+    for (const [filepath, requests] of filesToUpdate) {
+        await saveRequestsToFile(filepath, requests);
+    }
+}
+
+async function saveRequestsToFile(filepath: string, requests: StudentRequest[]) {
+    if (requests.length === 0) return;
+    const sampleReq = requests[0]; // For logging context
+
+    try {
+        let content: AnswerContent = {};
+        try {
+            if (fs.existsSync(filepath)) {
+                let fileContent = await fs.promises.readFile(filepath, 'utf8');
+                content = JSON.parse(fileContent);
+            }
+        } catch (readErr) {
+            logError(`Error reading file ${filepath}: ${readErr}`);
+        }
+
+        // Apply all updates
+        requests.forEach(req => {
+            content[req.questionId] = req.answer;
+            if (req.answer === "") {
+                delete content[req.questionId];
+            }
+            // Use provided domain or fallback
+            const d = req.domain || 'unknown';
+            logDebug(`[{(d:${d},ts:"${moment(new Date()).format("YYYY-MM-DD HH:mm:ss")}",hID: ${req.historyId}, edID:${req.examdetailsId}, qID:${req.questionId}, a:${req.answer === "" ? 0 : req.answer})}]`);
+        });
+
+        await fs.promises.writeFile(filepath, JSON.stringify(content), { flag: 'w+' });
+
+    } catch (ex) {
+        logError(ex);
+    }
+}
+
+function InitSocketIO(server: HttpServer) {
     let io = new Server(server, {
         path: '/io',
         cors: {
@@ -48,30 +115,16 @@ function InitSocketIO(server: HttpServer) {
         }
 
         sendLog(socket, "Connected to socket server.")
+        
         //init socket
         socket.on("init_exam", (req: StudentRequest) => {
-            let exam_group_id = req.exam_group_id;
-            let historyId = req.historyId;
-            let studentId = req.studentId;
-
-            if (exam_queue[exam_group_id] === undefined) {
-                exam_queue[exam_group_id] = {};
-            }
-
-            if (exam_queue[exam_group_id][studentId] !== undefined) {
-                sendLog(socket, "Already Initialized")
-                return;
-            }
-
-            // For init, we don't necessarily need the batch queue unless we are queueing setup tasks.
-            // But preserving existing structure where we assign a queue.
-            // The previous code initialized a Queue here but didn't pass options. 
-            // We should use the same init logic as below or just a placeholder if it's meant to be the same queue.
-            // Actually, initQueue function handles creation with correct options.
-            initQueue(exam_group_id, studentId, socket, answer_path, domain);
+            // Initialization is now lightweight, just ready check
+            // No strict need to track exam_queue unless for other logic
+            // Removed exam_queue logic as it was primarily for Queues
             
             sendLog(socket, "Init successfully");
         })
+
         //On remaining time event
         socket.on("get_remaining_time", (req: StudentRequest) => {
             let endtimestamp_in_ms = req.endtimestamp || 0;
@@ -85,80 +138,25 @@ function InitSocketIO(server: HttpServer) {
                 remaining_time: remainig_time
             });
         })
+
         //On Answer question
         socket.on("answer_by_student", (req: StudentRequest) => {
-            let exam_group_id = req.exam_group_id;
-            let studentId = req.studentId;
+            // Attach context needed for processing
+            req.answer_path = answer_path;
+            req.domain = domain;
+            
+            // Add to global write queue
+            writeQueue.add(req);
 
-            initQueue(exam_group_id, studentId, socket, answer_path, domain);
-
-            if (exam_queue[exam_group_id] && exam_queue[exam_group_id][studentId]) {
-                exam_queue[exam_group_id][studentId].add(req);
-            }
             sendLog(socket, "successfully answer received.")
         })
+
         //On disconnect
         socket.on("disconnect", () => {
 
         })
     }
-    //
-    const initQueue = (exam_group_id: string|number, studentId: string|number, socket: Socket, answer_path: string, domain: string) => {
-        if (exam_queue[exam_group_id] === undefined) {
-            exam_queue[exam_group_id] = {};
-        }
-        if (exam_queue[exam_group_id][studentId] !== undefined) {
-            // Already initialized, do nothing or log
-            // sendLog(socket, "Already Initialized") // Optional: repetitive log
-        } else {
-            exam_queue[exam_group_id][studentId] = new Queue<StudentRequest>({
-                batchSize: 10,
-                batchTime: 5000,
-                key: (req) => req.questionId, // Deduplicate based on questionId
-                processor: async (batch) => {
-                    await saveBatchAnswers(batch, answer_path, domain);
-                }
-            });
-            // sendLog(socket, "Init successfully"); // Optional to avoid double sending
-        }
-    }
-    
-    //save batch answers to file
-    const saveBatchAnswers = async (batch: StudentRequest[], answer_path: string, domain: string) => {
-        if (batch.length === 0) return;
 
-        // Assuming all requests in a batch are for the same student (since queue is per student)
-        let studentId = batch[0].studentId;
-        let filename = studentId + ".json";
-        let filepath = `${answer_path}${filename}`;
-
-        try {
-            let content: AnswerContent = {};
-            try {
-                if (fs.existsSync(filepath)) {
-                    let fileContent = await fs.promises.readFile(filepath, 'utf8');
-                    content = JSON.parse(fileContent);
-                }
-            } catch (readErr) {
-                logError(`Error reading file ${filepath}: ${readErr}`);
-            }
-
-            // Apply all updates
-            batch.forEach(req => {
-                content[req.questionId] = req.answer;
-                if (req.answer === "") {
-                    delete content[req.questionId];
-                }
-
-                logDebug(`[{(d:${domain},ts:"${moment(new Date()).format("YYYY-MM-DD HH:mm:ss")}",hID: ${req.historyId}, edID:${req.examdetailsId}, qID:${req.questionId}, a:${req.answer === "" ? 0 : req.answer})}]`);
-            });
-
-            await fs.promises.writeFile(filepath, JSON.stringify(content), { flag: 'w+' });
-
-        } catch (ex) {
-            logError(ex);
-        }
-    }
     //send log to client
     const sendLog = (socket: Socket, message: string) => {
         socket.emit("log", message);
