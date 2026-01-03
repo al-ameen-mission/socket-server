@@ -4,6 +4,9 @@ import { getAnswers } from '../database/manager';
 import { logger } from '../utils/logger';
 import fs from 'fs';
 
+import { validate } from '../middleware/validate';
+import { answerFilterSchema } from './schemas';
+
 const router = Router();
 
 router.get('/', (req, res) => {
@@ -13,29 +16,11 @@ router.get('/', (req, res) => {
     });
 });
 
-router.post('/answers/:studentId', (req: Request, res: Response) => {
+router.post('/answers/:studentId', validate(answerFilterSchema), (req: Request, res: Response) => {
     const studentId = req.params.studentId;
     const { hostname, examId, examGroupId, examDetailsId } = req.body; 
 
-    if (!hostname || typeof hostname !== 'string') {
-        res.status(400).json({ error: 'Invalid or missing hostname' });
-        return;
-    }
-
-    // Validation: Ensure only one filter type is active (optional strictness, but good for clarity)
-    // For now, just ensure types are correct if provided
-    if (examId && typeof examId !== 'string' && typeof examId !== 'number') {
-        res.status(400).json({ error: 'Invalid examId' });
-        return;
-    }
-    if (examGroupId && typeof examGroupId !== 'string' && typeof examGroupId !== 'number') {
-        res.status(400).json({ error: 'Invalid examGroupId' });
-        return;
-    }
-    if (examDetailsId && !Array.isArray(examDetailsId) && typeof examDetailsId !== 'string' && typeof examDetailsId !== 'number') {
-         res.status(400).json({ error: 'Invalid examDetailsId' });
-         return;
-    }
+    // Hostname validation handled by Zod middlewware
 
     const answerPath = config.ANSWER_PATH.replace('{domain}', hostname);
 
@@ -46,6 +31,7 @@ router.post('/answers/:studentId', (req: Request, res: Response) => {
 
     try {
         // Map request body to db filter: examDetailsId (from body) might be array
+        // Zod schema allows examDetailsId to be array or single value
         const filters = { 
             examId, 
             examGroupId, 
