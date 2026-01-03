@@ -2,244 +2,190 @@
 
 {% block body %}
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
   
-  :root {
-    --glass-bg: rgba(15, 23, 42, 0.6);
-    --glass-border: rgba(255, 255, 255, 0.08);
-    --accent-emerald: #10b981;
-    --accent-indigo: #6366f1;
-    --accent-rose: #f43f5e;
-  }
-
   body {
-    background: radial-gradient(circle at top left, #0f172a, #020617);
-    color: #f1f5f9;
+    background-color: #f8fafc;
+    color: #1e293b;
     font-family: 'Inter', sans-serif;
   }
 
-  .glass {
-    background: var(--glass-bg);
-    backdrop-filter: blur(12px);
-    border: 1px solid var(--glass-border);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  .card-premium {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
   }
 
-  .input-field {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: all 0.2s ease;
+  .input-clean {
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    font-size: 11px;
+    transition: all 0.15s ease;
   }
 
-  .input-field:focus {
-    background: rgba(255, 255, 255, 0.07);
-    border-color: var(--accent-indigo);
-    box-shadow: 0 0 0 1px var(--accent-indigo);
+  .input-clean:focus {
+    background: #ffffff;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+    outline: none;
   }
 
-  .custom-scrollbar::-webkit-scrollbar {
-    width: 6px;
+  .btn-primary {
+    background: #1e293b;
+    color: #ffffff;
+    transition: all 0.2s;
   }
-  .custom-scrollbar::-webkit-scrollbar-track {
-    background: transparent;
+
+  .btn-primary:hover {
+    background: #0f172a;
+    transform: translateY(-1px);
   }
-  .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-  }
+
+  .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+  .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+  .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
 </style>
 
-<div class="max-w-[1600px] mx-auto p-4 md:p-8 space-y-6">
+<div class="max-w-[1400px] mx-auto p-4 md:p-6 space-y-6">
   
-  <!-- Top Bar: Identity & Global Controls -->
-  <div class="flex flex-col lg:flex-row gap-6 items-start lg:items-center justify-between glass p-6 rounded-2xl">
-    <div class="space-y-1">
-      <div class="flex items-center gap-3">
-        <div class="p-2 bg-indigo-500/20 rounded-lg">
-          <svg class="w-6 h-6 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-        </div>
-        <div>
-          <h1 class="text-xl font-bold tracking-tight text-white">WTOS <span class="text-indigo-400">Hub</span></h1>
-          <p class="text-[10px] text-slate-400 uppercase tracking-[0.2em] font-medium">Remote Proctoring Engine</p>
+  <!-- Global Toolbar -->
+  <div class="card-premium p-4 flex flex-wrap items-center justify-between gap-4">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-bold text-lg">W</div>
+      <div>
+        <h1 class="text-sm font-bold text-slate-900 tracking-tight">WTOS Admin Console</h1>
+        <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+            <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Server Operational</span>
         </div>
       </div>
     </div>
 
-    <!-- Global Params Sidebar-lite -->
-    <div class="flex flex-wrap gap-4 items-center bg-white/5 p-3 rounded-xl border border-white/5">
-       <div class="flex flex-col">
-          <label class="text-[9px] font-bold text-slate-500 uppercase px-1">Active Student</label>
-          <input type="text" id="_studentId" class="w-24 px-2 py-1 bg-transparent border-none text-sm font-bold text-white focus:ring-0" value="1">
+    <!-- Active Context -->
+    <div class="flex items-center bg-slate-50 border border-slate-200 rounded-lg p-1.5 gap-4">
+       <div class="flex flex-col px-2 border-r border-slate-200">
+          <label class="text-[9px] font-bold text-slate-400 uppercase">Student</label>
+          <input type="text" id="_studentId" class="w-16 bg-transparent border-none p-0 text-xs font-bold text-slate-800 focus:ring-0" value="1">
        </div>
-       <div class="w-px h-8 bg-white/10"></div>
-       <div class="flex flex-col">
-          <label class="text-[9px] font-bold text-slate-500 uppercase px-1">API Hostname</label>
-          <input type="text" id="_api_hostname" class="w-32 px-2 py-1 bg-transparent border-none text-sm font-bold text-white focus:ring-0" value="localhost">
+       <div class="flex flex-col px-2 border-r border-slate-200">
+          <label class="text-[9px] font-bold text-slate-400 uppercase">Hostname</label>
+          <input type="text" id="_api_hostname" class="w-28 bg-transparent border-none p-0 text-xs font-bold text-slate-800 focus:ring-0" value="localhost">
        </div>
-       <div class="w-px h-8 bg-white/10"></div>
-       <div class="flex gap-6 px-2">
+       <div class="flex gap-4 px-3">
            <div class="text-center">
-              <div class="text-[9px] font-bold text-slate-500 uppercase">Queue</div>
-              <div class="text-xs font-mono text-emerald-400 font-bold" id="stat-queue">0</div>
+              <span class="text-[9px] font-bold text-slate-400 uppercase block">Queue</span>
+              <span class="text-[11px] font-mono text-indigo-600 font-bold" id="stat-queue">0</span>
            </div>
            <div class="text-center">
-              <div class="text-[9px] font-bold text-slate-500 uppercase">Pool</div>
-              <div class="text-xs font-mono text-indigo-400 font-bold" id="stat-db">0</div>
+              <span class="text-[9px] font-bold text-slate-400 uppercase block">Pool</span>
+              <span class="text-[11px] font-mono text-emerald-600 font-bold" id="stat-db">0</span>
            </div>
            <div class="text-center">
-              <div class="text-[9px] font-bold text-slate-500 uppercase">RSS</div>
-              <div class="text-xs font-mono text-amber-400 font-bold" id="stat-mem">0</div>
+              <span class="text-[9px] font-bold text-slate-400 uppercase block">Memory</span>
+              <span class="text-[11px] font-mono text-rose-600 font-bold" id="stat-mem">0</span>
            </div>
        </div>
     </div>
   </div>
 
-  <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+  <!-- Row 1: Real-time Socket -->
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
     
-    <!-- Protocols Sidebar -->
-    <div class="lg:col-span-4 space-y-6">
-      
-      <!-- Card: Socket -->
-      <div class="glass rounded-2xl overflow-hidden">
-        <div class="px-5 py-4 border-b border-white/5 flex items-center justify-between">
-           <div class="flex items-center gap-2">
-             <div class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)] animate-pulse"></div>
-             <h3 class="text-xs font-bold text-slate-300 uppercase tracking-widest">Socket Emitter</h3>
-           </div>
-           <span class="text-[9px] text-slate-500 font-mono">v4.x</span>
-        </div>
-        <div class="p-5 space-y-4">
-           <div class="grid grid-cols-2 gap-4">
-              <div class="space-y-1">
-                <label class="text-[10px] text-slate-500 font-semibold ml-1">Exam ID</label>
-                <input type="text" id="_examId" class="input-field w-full px-3 py-2 rounded-lg text-xs font-mono text-white outline-none" value="1">
-              </div>
-              <div class="space-y-1">
-                <label class="text-[10px] text-slate-500 font-semibold ml-1">Group ID</label>
-                <input type="text" id="_exam_group_id" class="input-field w-full px-3 py-2 rounded-lg text-xs font-mono text-white outline-none" value="1">
-              </div>
-           </div>
-           <div class="grid grid-cols-2 gap-4">
-              <div class="space-y-1">
-                <label class="text-[10px] text-slate-500 font-semibold ml-1">Details ID</label>
-                <input type="text" id="_examdetailsId" class="input-field w-full px-3 py-2 rounded-lg text-xs font-mono text-white outline-none" value="1">
-              </div>
-              <div class="space-y-1">
-                <label class="text-[10px] text-slate-500 font-semibold ml-1">History ID</label>
-                <input type="text" id="_historyId" class="input-field w-full px-3 py-2 rounded-lg text-xs font-mono text-white outline-none" value="1">
-              </div>
-           </div>
-           <div class="grid grid-cols-3 gap-4">
-              <div class="col-span-2 space-y-1">
-                <label class="text-[10px] text-slate-500 font-semibold ml-1">Question ID</label>
-                <input type="text" id="_questionId" class="input-field w-full px-3 py-2 rounded-lg text-xs font-mono text-white outline-none" value="1">
-              </div>
-              <div class="space-y-1">
-                <label class="text-[10px] text-slate-500 font-semibold ml-1">Ans</label>
-                <input type="text" id="_answer" class="input-field w-full px-3 py-2 rounded-lg text-xs font-bold text-center text-emerald-400 outline-none" value="A">
-              </div>
-           </div>
-           <button onclick="save_text_answer()" class="group w-full py-3 bg-white hover:bg-white/90 text-slate-900 text-[11px] font-bold rounded-xl transition-all flex items-center justify-center gap-2 active:scale-[0.98]">
-              Emit Event
-              <svg class="w-3 h-3 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-           </button>
-        </div>
+    <!-- Socket Form -->
+    <div class="lg:col-span-4 card-premium overflow-hidden">
+      <div class="px-4 py-2.5 bg-slate-50 border-b border-slate-100 flex items-center justify-between">
+        <h2 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Socket Emitter</h2>
+        <span class="text-[9px] bg-emerald-100 text-emerald-700 font-bold px-2 py-0.5 rounded">Real-time</span>
       </div>
-
-      <!-- Card: REST API -->
-      <div class="glass rounded-2xl overflow-hidden border-indigo-500/10 border shadow-[0_0_20px_rgba(99,102,241,0.05)]">
-        <div class="px-5 py-4 border-b border-white/5 flex items-center justify-between">
-           <div class="flex items-center gap-2">
-             <div class="w-2 h-2 rounded-full bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.5)]"></div>
-             <h3 class="text-xs font-bold text-slate-300 uppercase tracking-widest">REST Inspector</h3>
-           </div>
-           <span class="text-[9px] text-indigo-400 font-bold px-2 py-0.5 bg-indigo-500/10 rounded">POST</span>
-        </div>
-        <div class="p-5 space-y-4">
-           <div class="grid grid-cols-2 gap-4">
-              <div class="space-y-1">
-                <label class="text-[10px] text-slate-500 font-semibold ml-1">Filter Exam</label>
-                <input type="text" id="_api_examId" class="input-field w-full px-3 py-2 rounded-lg text-xs font-mono text-white placeholder-slate-700 outline-none" placeholder="-">
-              </div>
-              <div class="space-y-1">
-                <label class="text-[10px] text-slate-500 font-semibold ml-1">Filter Group</label>
-                <input type="text" id="_api_examGroupId" class="input-field w-full px-3 py-2 rounded-lg text-xs font-mono text-white placeholder-slate-700 outline-none" placeholder="-">
-              </div>
-           </div>
-           <div class="space-y-1">
-             <label class="text-[10px] text-slate-500 font-semibold ml-1">Details Context (CSV)</label>
-             <input type="text" id="_api_examDetailsId" class="input-field w-full px-3 py-2 rounded-lg text-xs font-mono text-white placeholder-slate-700 outline-none" placeholder="e.g. 101, 102">
-           </div>
-           <button onclick="test_api()" class="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white text-[11px] font-bold rounded-xl transition-all shadow-lg shadow-indigo-600/20 active:scale-[0.98]">
-              Fetch Answers
-           </button>
-        </div>
+      <div class="p-4 space-y-3">
+         <div class="grid grid-cols-2 gap-3">
+            <input type="text" id="_examId" placeholder="Exam ID" class="input-clean w-full px-2.5 py-1.5 rounded-md" value="1">
+            <input type="text" id="_exam_group_id" placeholder="Group ID" class="input-clean w-full px-2.5 py-1.5 rounded-md" value="1">
+         </div>
+         <div class="grid grid-cols-2 gap-3">
+            <input type="text" id="_examdetailsId" placeholder="Details ID" class="input-clean w-full px-2.5 py-1.5 rounded-md" value="1">
+            <input type="text" id="_historyId" placeholder="History ID" class="input-clean w-full px-2.5 py-1.5 rounded-md" value="1">
+         </div>
+         <div class="flex gap-3">
+            <input type="text" id="_questionId" placeholder="Question" class="input-clean flex-1 px-2.5 py-1.5 rounded-md" value="1">
+            <input type="text" id="_answer" placeholder="Ans" class="input-clean w-16 px-2.5 py-1.5 rounded-md text-center font-bold text-indigo-600" value="A">
+         </div>
+         <button onclick="save_text_answer()" class="btn-primary w-full py-2 rounded-md text-[11px] font-bold shadow-sm">
+            Emit Answer
+         </button>
       </div>
-
     </div>
 
-    <!-- Main Console Output -->
-    <div class="lg:col-span-8 space-y-6">
-      
-      <!-- API Results Table -->
-      <div class="glass rounded-2xl flex flex-col h-[400px] overflow-hidden">
-        <div class="px-6 py-4 border-b border-white/5 flex justify-between items-center bg-white/2">
-           <div class="flex items-center gap-3">
-             <h5 class="text-sm font-semibold text-white tracking-wide">Structured Data</h5>
-             <span id="result-status" class="text-[9px] font-bold bg-white/5 text-slate-400 px-2 py-1 rounded-md border border-white/5 uppercase tracking-tighter">Standby</span>
-           </div>
+    <!-- Live Logs -->
+    <div class="lg:col-span-8 card-premium flex flex-col h-[280px] overflow-hidden">
+      <div class="px-4 py-2 bg-slate-50 border-b border-slate-100 flex items-center justify-between">
+         <h2 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest text-[#000]">Socket Stream</h2>
+         <button onclick="document.getElementById('console_log').innerHTML=''" class="text-[9px] font-bold text-slate-300 hover:text-slate-500">CLEAR</button>
+      </div>
+      <div id="console_log" class="flex-1 overflow-y-auto p-4 font-mono text-[10px] space-y-1.5 custom-scrollbar bg-slate-50/50">
+        <!-- Logs -->
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Row 2: REST API -->
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+    
+    <!-- API Form -->
+    <div class="lg:col-span-4 card-premium overflow-hidden border-indigo-100 shadow-indigo-100/20">
+      <div class="px-4 py-2.5 bg-indigo-50 border-b border-indigo-100 flex items-center justify-between">
+        <h2 class="text-[10px] font-bold text-indigo-600 uppercase tracking-widest">REST Inspector</h2>
+        <span class="text-[9px] font-mono font-bold text-indigo-400">POST</span>
+      </div>
+      <div class="p-4 space-y-3">
+         <div class="grid grid-cols-2 gap-3">
+            <input type="text" id="_api_examId" placeholder="Filter Exam" class="input-clean w-full px-2.5 py-1.5 rounded-md">
+            <input type="text" id="_api_examGroupId" placeholder="Filter Group" class="input-clean w-full px-2.5 py-1.5 rounded-md">
+         </div>
+         <input type="text" id="_api_examDetailsId" placeholder="Filter Details (CSV: 101, 102)" class="input-clean w-full px-2.5 py-1.5 rounded-md">
+         <button onclick="test_api()" class="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md text-[11px] font-bold shadow-md shadow-indigo-600/10">
+            Fetch Archive
+         </button>
+      </div>
+    </div>
+
+    <!-- Results Table -->
+    <div class="lg:col-span-8 card-premium flex flex-col h-[320px] overflow-hidden">
+        <div class="px-4 py-2.5 bg-slate-50 border-b border-slate-100 flex justify-between items-center">
+           <h2 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Data Store Explorer</h2>
+           <span id="result-status" class="text-[9px] font-bold bg-white text-slate-400 px-2 py-0.5 border border-slate-200 rounded">Ready</span>
         </div>
         <div class="flex-1 overflow-y-auto custom-scrollbar" id="api_results_container">
-          <!-- Empty State -->
-          <div class="h-full flex flex-col items-center justify-center opacity-40">
-             <div class="p-4 bg-white/5 rounded-full mb-4">
-               <svg class="w-10 h-10 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
-             </div>
-             <p class="text-xs font-medium text-slate-500">Awaiting REST response...</p>
-          </div>
+            <div class="h-full flex items-center justify-center text-slate-300">
+               <span class="text-[11px] font-medium italic">Execute request to view records</span>
+            </div>
         </div>
-      </div>
-
-      <!-- Logs -->
-      <div class="glass rounded-2xl flex flex-col h-[320px] overflow-hidden border border-emerald-500/5">
-        <div class="px-6 py-4 border-b border-white/5 flex justify-between items-center bg-slate-900/40">
-           <div class="flex items-center gap-3">
-             <h5 class="text-sm font-semibold text-white tracking-wide">Live Stream</h5>
-             <div class="flex items-center gap-1.5 px-2 py-1 bg-emerald-500/10 rounded-md border border-emerald-500/10">
-               <div class="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
-               <span class="text-[9px] font-bold text-emerald-400 uppercase tracking-tighter">Real-time</span>
-             </div>
-           </div>
-           <button onclick="document.getElementById('console_log').innerHTML=''" class="text-[10px] font-bold text-slate-500 hover:text-rose-400 transition-colors">CLEAR</button>
-        </div>
-        <div id="console_log" class="flex-1 overflow-y-auto p-6 font-mono text-[11px] space-y-1.5 custom-scrollbar leading-relaxed">
-           <!-- Logs -->
-        </div>
-      </div>
-
     </div>
+
   </div>
 
 </div>
 
 <script>
-  // Advanced Log Color Matrix
+  // Log formatting
   const LOG_STYLE = {
-    'in': { color: 'text-emerald-400', arrow: '→', bg: 'bg-emerald-500/5' },
-    'out': { color: 'text-indigo-400', arrow: '←', bg: 'bg-indigo-500/5' },
-    'sys': { color: 'text-amber-400', arrow: '⚡', bg: '' }
+    'in': { color: 'text-indigo-600', label: 'IN' },
+    'out': { color: 'text-emerald-600', label: 'OUT' },
+    'sys': { color: 'text-slate-400', label: 'SYS' }
   };
 
   function handle_log(msg, type='in'){
       const style = LOG_STYLE[type] || LOG_STYLE.sys;
-      const now = new Date().toLocaleTimeString('en-US', { hour12: false, fractionalSecondDigits: 1 });
+      const now = new Date().toLocaleTimeString('en-US', { hour12: false });
       
       const el = document.createElement('div');
-      el.className = `flex gap-3 items-start p-1.5 rounded transition-colors hover:bg-white/5 group`;
+      el.className = `flex gap-2 group border-l-2 border-transparent hover:border-indigo-100 px-1 py-0.5`;
       el.innerHTML = `
-        <span class="text-slate-600 shrink-0 font-medium opacity-50 select-none">${now}</span>
-        <span class="${style.color} font-bold select-none">${style.arrow}</span>
-        <span class="text-slate-200 break-all whitespace-pre-wrap">${msg}</span>
+        <span class="text-[9px] text-slate-300 font-medium select-none w-14 shrink-0">${now}</span>
+        <span class="text-[9px] font-bold ${style.color} w-6 select-none">${style.label}</span>
+        <span class="text-slate-700 break-all select-all">${msg}</span>
       `;
 
       const container = document.querySelector("#console_log");
@@ -247,6 +193,7 @@
       container.scrollTop = container.scrollHeight;
   }
 
+  // Poll Stats
   async function updateStats() {
       try {
           const res = await fetch('/stats');
@@ -259,13 +206,15 @@
   setInterval(updateStats, 2000);
   updateStats(); 
 
+  // Socket
   const socketUrl = "{{ SOCKET_IO_URL }}" || window.location.origin;
   const socket = io(socketUrl, { path: "/io", transports: ['websocket', 'polling'] });
   
-  socket.on("connect", () => handle_log(`Node established: ${socket.id}`, "sys"));
-  socket.on("disconnect", () => handle_log("Node connection lost", "sys"));
+  socket.on("connect", () => handle_log(`Connection tunnel established`, "sys"));
+  socket.on("disconnect", () => handle_log("Connection tunnel closed", "sys"));
   socket.on("log", (msg) => handle_log(msg, "in"));
 
+  // Emitter
   window.save_text_answer = function(){
     const payload = {
       examId: document.getElementById("_examId").value,
@@ -277,9 +226,10 @@
       answer: document.getElementById("_answer").value,
     };
     socket.emit("answer_by_student", payload);
-    handle_log(`Emit [Q${payload.questionId}]: Payload processed locally`, "out");
+    handle_log(`Emit Answer [Q${payload.questionId}]`, "out");
   }
 
+  // API Client
   window.test_api = async function() {
       const studentId = document.getElementById("_studentId").value;
       const hostname = document.getElementById("_api_hostname").value;
@@ -287,9 +237,7 @@
       const examGroupId = document.getElementById("_api_examGroupId").value;
       const examDetailsRaw = document.getElementById("_api_examDetailsId").value;
       
-      const payload = { hostname };
-      if (examId) payload.examId = examId;
-      if (examGroupId) payload.examGroupId = examGroupId;
+      const payload = { hostname, examId, examGroupId };
       if (examDetailsRaw) payload.examDetailsId = examDetailsRaw.split(',').map(s => s.trim());
 
       handle_log(`POST /answers/${studentId}`, "out");
@@ -297,9 +245,8 @@
       const resultsContainer = document.getElementById('api_results_container');
       const statusLabel = document.getElementById('result-status');
       
-      resultsContainer.classList.add('opacity-40'); 
-      statusLabel.innerText = "PENDING";
-      statusLabel.className = "text-[9px] font-bold bg-indigo-500/20 text-indigo-400 px-2 py-1 rounded-md border border-indigo-500/20 uppercase tracking-tighter";
+      resultsContainer.style.opacity = '0.5';
+      statusLabel.innerText = "Processing...";
 
       try {
           const res = await fetch(`/answers/${studentId}`, {
@@ -309,51 +256,39 @@
           });
           
           const records = await res.json();
-          resultsContainer.classList.remove('opacity-40');
+          resultsContainer.style.opacity = '1';
 
           if (res.ok) {
               const count = records.length;
-              handle_log(`API Response: ${count} records`, "in");
-              statusLabel.innerText = `${count} OBJECTS`;
-              statusLabel.className = "text-[9px] font-bold bg-emerald-500/20 text-emerald-400 px-2 py-1 rounded-md border border-emerald-500/20 uppercase tracking-tighter";
+              handle_log(`HTTP SUCCESS: Received ${count} records`, "in");
+              statusLabel.innerText = `${count} Records Found`;
               
               if (count === 0) {
-                 resultsContainer.innerHTML = `<div class="h-full flex items-center justify-center text-slate-500 text-xs font-medium">Empty set returned for filter profile</div>`;
+                 resultsContainer.innerHTML = `<div class="h-full flex items-center justify-center text-slate-400 text-xs">No records available for these filters.</div>`;
                  return;
               }
 
               let html = `
-                <table class="w-full text-left border-collapse">
-                  <thead class="sticky top-0 bg-slate-900 border-b border-white/10 z-10">
+                <table class="w-full text-left">
+                  <thead class="sticky top-0 bg-white border-b border-slate-100 shadow-sm z-10">
                     <tr>
-                      <th class="p-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Question</th>
-                      <th class="p-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest text-center">Value</th>
-                      <th class="p-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Metadata Context</th>
+                      <th class="p-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Question</th>
+                      <th class="p-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Value</th>
+                      <th class="p-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Context (Exam/Grp)</th>
                     </tr>
                   </thead>
-                  <tbody class="divide-y divide-white/5">`;
+                  <tbody class="divide-y divide-slate-50">`;
               
               records.forEach(r => {
                   html += `
-                    <tr class="hover:bg-white/[0.02] transition-colors group">
-                      <td class="p-4">
-                        <div class="flex flex-col">
-                           <span class="text-xs font-bold text-white group-hover:text-indigo-400 transition-colors">Q${r.questionId}</span>
-                           <span class="text-[9px] text-slate-500 font-mono">ID: ${r.studentId}</span>
-                        </div>
+                    <tr class="hover:bg-slate-50/50 transition-colors">
+                      <td class="px-4 py-2 text-xs font-bold text-slate-900 leading-none">Q${r.questionId}</td>
+                      <td class="px-4 py-2">
+                         <span class="inline-block px-1.5 py-0.5 bg-indigo-50 text-indigo-700 rounded font-bold text-[11px]">${r.answer}</span>
                       </td>
-                      <td class="p-4 text-center">
-                         <span class="inline-block min-w-[24px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded px-2 py-0.5 text-xs font-bold">${r.answer}</span>
-                      </td>
-                      <td class="p-4">
-                        <div class="flex items-center gap-3">
-                           <div class="space-y-0.5">
-                              <span class="block text-[10px] text-slate-300 font-mono"><span class="text-slate-600">EXAM:</span> ${r.examId}</span>
-                              <span class="block text-[10px] text-slate-300 font-mono"><span class="text-slate-600">GRP:</span> ${r.examGroupId}</span>
-                           </div>
-                           <div class="h-6 w-px bg-white/5"></div>
-                           <span class="text-[9px] text-slate-500 font-mono truncate max-w-[150px]" title="${r.examDetailsId}">${r.examDetailsId}</span>
-                        </div>
+                      <td class="px-4 py-2 space-y-0.5">
+                         <div class="text-[10px] text-slate-500 font-mono">E: ${r.examId} / G: ${r.examGroupId}</div>
+                         <div class="text-[9px] text-slate-300 font-mono truncate max-w-[120px]" title="${r.examDetailsId}">${r.examDetailsId}</div>
                       </td>
                     </tr>
                   `;
@@ -363,19 +298,16 @@
               resultsContainer.innerHTML = html;
 
           } else {
-              handle_log(`Service error: ${records.error}`, "sys");
-              statusLabel.innerText = "FAILED";
-              statusLabel.className = "text-[9px] font-bold bg-rose-500/20 text-rose-400 px-2 py-1 rounded-md border border-rose-500/20 uppercase tracking-tighter";
-              resultsContainer.innerHTML = `<div class="p-6 text-rose-400 text-xs font-mono bg-rose-500/5 m-6 rounded-xl border border-rose-500/20">${records.error}</div>`;
+              handle_log(`HTTP ERROR: ${records.error}`, "sys");
+              statusLabel.innerText = "Error";
+              resultsContainer.innerHTML = `<div class="p-6 text-rose-500 text-xs font-medium bg-rose-50 m-4 rounded-lg">${records.error}</div>`;
           }
       } catch (e) {
-          resultsContainer.classList.remove('opacity-40');
-          handle_log(`Connection refused`, "sys");
-          statusLabel.innerText = "OFFLINE";
-          statusLabel.className = "text-[9px] font-bold bg-rose-500/20 text-rose-400 px-2 py-1 rounded-md border border-rose-500/20 uppercase tracking-tighter";
-          resultsContainer.innerHTML = `<div class="p-6 text-rose-400 text-xs font-mono m-6 rounded-xl border border-rose-500/20">${e}</div>`;
+          resultsContainer.style.opacity = '1';
+          handle_log(`Network Failure`, "sys");
+          statusLabel.innerText = "Offline";
+          resultsContainer.innerHTML = `<div class="p-6 text-rose-500 text-xs font-medium m-4">${e}</div>`;
       }
   }
 </script>
 {% endblock %}
-
