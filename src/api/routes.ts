@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import config from '../config/env';
-import { getAnswers, getDbStats } from '../database/manager';
+import { getAnswers, getAnswersByExam, getDbStats } from '../database/manager';
 import { logger } from '../utils/logger';
 import fs from 'fs';
 import { io } from '../socket';
@@ -37,10 +37,9 @@ router.get('/', (req, res) => {
     });
 });
 
-router.post('/answers/:studentId', (req: Request, res: Response) => {
-    const sId = req.params.studentId;
-    // Accepting short names as per "remove old code" instruction
-    const { hostname, eId, egId, edId } = req.body; 
+router.post('/answers/exam/:eId', (req: Request, res: Response) => {
+    const eId = req.params.eId;
+    const { hostname, sId, egId, edId } = req.body; 
 
     // Basic Validation
     if (!hostname) {
@@ -56,13 +55,7 @@ router.post('/answers/:studentId', (req: Request, res: Response) => {
     }
 
     try {
-        const filters = { 
-            eId, 
-            egId, 
-            edIds: Array.isArray(edId) ? edId : (edId ? [edId] : undefined) 
-        };
-        
-        const answers = getAnswers(answerPath, sId, filters);
+        const answers = getAnswersByExam(answerPath, eId, { sId, egId, edId });
         res.json(answers);
     } catch (e) {
         logger.error(`API Error fetching answers: ${e}`);

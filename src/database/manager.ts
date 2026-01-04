@@ -178,6 +178,38 @@ export const getAnswers = (folderPath: string, sId: string | number, filters?: {
     }
 };
 
+export const getAnswersByExam = (folderPath: string, eId: string | number, filters?: { sId?: string | number, egId?: string | number, edId?: string | number }): AnswerRecord[] => {
+    try {
+        const instance = getDbInstance(folderPath);
+        
+        // Round-Robin Reader Selection
+        const readerDb = instance.readers[instance.readerIndex];
+        instance.readerIndex = (instance.readerIndex + 1) % instance.readers.length;
+
+        let query = 'SELECT * FROM answers WHERE e_id = ?';
+        const params: any[] = [String(eId)];
+
+        if (filters?.sId) {
+            query += ' AND s_id = ?';
+            params.push(String(filters.sId));
+        }
+        if (filters?.egId) {
+            query += ' AND eg_id = ?';
+            params.push(String(filters.egId));
+        }
+        if (filters?.edId) {
+            query += ' AND ed_id = ?';
+            params.push(String(filters.edId));
+        }
+
+        const stmt = readerDb.prepare(query);
+        return stmt.all(...params).map(mapRow);
+    } catch (e: any) {
+        logger.error(`Read By Exam error: ${e}`);
+        return [];
+    }
+};
+
 export const getDbStats = () => {
     return {
         mode: 'SQLite WAL',

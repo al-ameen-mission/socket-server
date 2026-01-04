@@ -1,7 +1,7 @@
 import { io } from 'socket.io-client';
 
 const URL = 'http://localhost:3000';
-const NUM_USERS = 500;
+const NUM_USERS = 2000;
 const BATCH_SIZE = 50;
 const BATCH_DELAY_MS = 1000;
 const ANSWERS = ['A', 'B', 'C', 'D'];
