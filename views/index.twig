@@ -282,8 +282,8 @@
           statsChart.data.labels.push(now);
           statsChart.data.datasets[0].data.push(data.queue.bufferSize);
 
-          statsChart.data.datasets[2].data.push(data.cpu.percentage);
-          statsChart.data.datasets[3].data.push(data.memory.rss);
+          statsChart.data.datasets[1].data.push(data.cpu.percentage);
+          statsChart.data.datasets[2].data.push(data.memory.rss);
           
           if (statsChart.data.labels.length > MAX_DATA_POINTS) {
               statsChart.data.labels.shift();
