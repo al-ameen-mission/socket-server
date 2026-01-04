@@ -1,6 +1,6 @@
 import { io } from 'socket.io-client';
 
-const URL = 'http://localhost:3000';
+const URL = 'http://socket.al-ameen.lo';
 const NUM_USERS = 2000;
 const BATCH_SIZE = 50;
 const BATCH_DELAY_MS = 1000;
