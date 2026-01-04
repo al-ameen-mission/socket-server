@@ -10,6 +10,7 @@
   "dependencies": {
     "better-sqlite3": "^12.5.0",
     "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
     "express": "^5.2.1",
     "http-errors": "^2.0.1",
     "moment": "^2.29.1",
@@ -27,6 +28,7 @@
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.13",
     "@types/cookie-parser": "^1.4.10",
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/http-errors": "^2.0.5",
     "@types/morgan": "^1.9.10",

@@ -1,5 +1,6 @@
 import express from 'express';
 import path from 'path';
+import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import loggerMiddleware from 'morgan';
 import createError from 'http-errors';
@@ -18,6 +19,7 @@ app.use(loggerMiddleware('dev', {
     stream: { write: (msg) => logger.info(msg.trim()) }
 }));
 app.use(express.json());
+app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(process.cwd(), 'public')));
