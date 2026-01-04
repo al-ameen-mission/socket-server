@@ -107,7 +107,7 @@ class SubmissionService {
             const records: AnswerRecord[] = requests.map(r => ({
                 studentId: r.studentId,
                 questionId: r.questionId,
-                examId: r.examdetailsId, // Note: In StudentRequest it's examdetailsId (lowercase 'd')
+                examId: r.examId, // Note: In StudentRequest it's examdetailsId (lowercase 'd')
                 examDetailsId: r.examdetailsId,
                 examGroupId: r.exam_group_id, // Added required field
                 answer: r.answer

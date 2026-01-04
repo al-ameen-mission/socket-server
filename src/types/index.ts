@@ -4,6 +4,7 @@ export interface StudentRequest {
     studentId: string | number;
     questionId: string | number;
     answer: string;
+    examId: string | number;
     examdetailsId: string | number;
     endtimestamp?: number;
     
