@@ -1,7 +1,8 @@
-import { Router } from 'express';
+import { Router, Request, Response } from 'express';
 import config from '../config/env';
-
+import { getAnswers, getDbStats } from '../database/manager';
 import { logger } from '../utils/logger';
+import fs from 'fs';
 import { io } from '../socket';
 
 
@@ -36,15 +37,50 @@ router.get('/', (req, res) => {
     });
 });
 
+router.post('/answers/:studentId', (req: Request, res: Response) => {
+    const sId = req.params.studentId;
+    // Accepting short names as per "remove old code" instruction
+    const { hostname, eId, egId, edId } = req.body; 
+
+    // Basic Validation
+    if (!hostname) {
+        res.status(400).json({ error: 'Hostname required' });
+        return;
+    }
+
+    const answerPath = config.ANSWER_PATH.replace('{domain}', hostname);
+
+    if (!fs.existsSync(answerPath)) {
+        res.status(404).json({ error: 'Domain storage not found' });
+        return;
+    }
+
+    try {
+        const filters = { 
+            eId, 
+            egId, 
+            edIds: Array.isArray(edId) ? edId : (edId ? [edId] : undefined) 
+        };
+        
+        const answers = getAnswers(answerPath, sId, filters);
+        res.json(answers);
+    } catch (e) {
+        logger.error(`API Error fetching answers: ${e}`);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
 
 
 router.get('/stats', (req, res) => {
     try {
+        const dbStats = getDbStats();
         const queueStats = require('../services/submission.service').submissionService.getQueueStats();
         const memUsage = process.memoryUsage();
         const cpuUsage = process.cpuUsage();
 
         res.json({
+            database: dbStats,
             queue: queueStats,
             sockets: {
                 connected: io ? io.engine.clientsCount : 0

@@ -105,8 +105,11 @@ class SubmissionService {
         // Write to DBs
         for (const [folderPath, requests] of domainGroups) {
             const records: AnswerRecord[] = requests.map(r => ({
-                studentId: r.studentId,
-                questionId: r.questionId,
+                sId: r.studentId,
+                qId: r.questionId,
+                eId: r.examId,
+                edId: r.examdetailsId,
+                egId: r.exam_group_id,
                 answer: r.answer
             }));
 
