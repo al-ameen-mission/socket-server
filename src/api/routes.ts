@@ -63,8 +63,37 @@ router.post('/answers/exam/:eId', (req: Request, res: Response) => {
     }
 });
 
+router.post('/answers/student/:sId', (req: Request, res: Response) => {
+    const sId = req.params.sId;
+    const { hostname, eId, egId, edId, edIds } = req.body;
 
+    // Basic Validation
+    if (!hostname) {
+        res.status(400).json({ error: 'Hostname required' });
+        return;
+    }
 
+    const answerPath = config.ANSWER_PATH.replace('{domain}', hostname);
+
+    if (!fs.existsSync(answerPath)) {
+        res.status(404).json({ error: 'Domain storage not found' });
+        return;
+    }
+
+    try {
+        // Normalize edId/edIds
+        let targetEdIds: (string | number)[] | undefined = edIds;
+        if (!targetEdIds && edId) {
+            targetEdIds = [edId];
+        }
+
+        const answers = getAnswers(answerPath, sId, { eId, egId, edIds: targetEdIds });
+        res.json(answers);
+    } catch (e) {
+        logger.error(`API Error fetching student answers: ${e}`);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
 router.get('/stats', (req, res) => {
     try {
         const dbStats = getDbStats();
