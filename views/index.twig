@@ -310,13 +310,13 @@
   // Emitter
   window.save_text_answer = function(){
     const payload = {
-      examId: document.getElementById("_examId").value,
-      exam_group_id: document.getElementById("_exam_group_id").value,
-      examdetailsId: document.getElementById("_examdetailsId").value,
-      studentId: document.getElementById("_studentId").value,
-      questionId: document.getElementById("_questionId").value,
-      historyId: document.getElementById("_historyId").value,
-      answer: document.getElementById("_answer").value,
+      eId: document.getElementById("_examId").value,
+      egId: document.getElementById("_exam_group_id").value,
+      edId: document.getElementById("_examdetailsId").value,
+      sId: document.getElementById("_studentId").value,
+      qId: document.getElementById("_questionId").value,
+      hId: document.getElementById("_historyId").value,
+      ans: document.getElementById("_answer").value,
     };
     socket.emit("answer_by_student", payload);
     handle_log(`Emit Answer [Q${payload.questionId}]`, "out");
