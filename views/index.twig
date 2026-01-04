@@ -82,10 +82,7 @@
               <span class="text-[9px] font-bold text-slate-400 uppercase block">Queue</span>
               <span class="text-[11px] font-mono text-indigo-600 font-bold" id="stat-queue">0</span>
            </div>
-           <div class="text-center">
-              <span class="text-[9px] font-bold text-slate-400 uppercase block">Pool</span>
-              <span class="text-[11px] font-mono text-emerald-600 font-bold" id="stat-db">0</span>
-           </div>
+
            <div class="text-center">
               <span class="text-[9px] font-bold text-slate-400 uppercase block">CPU</span>
               <span class="text-[11px] font-mono text-amber-600 font-bold" id="stat-cpu">0%</span>
@@ -165,50 +162,7 @@
 
   </div>
 
-  <!-- Row 2: REST API -->
-  <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
-    
-    <!-- API Form -->
-    <div class="lg:col-span-3 card-premium overflow-hidden border-indigo-100 shadow-indigo-100/20">
-      <div class="px-4 py-2.5 bg-indigo-50 border-b border-indigo-100 flex items-center justify-between">
-        <h2 class="text-[10px] font-bold text-indigo-600 uppercase tracking-widest">REST Inspector</h2>
-        <span class="text-[9px] font-mono font-bold text-indigo-400">POST</span>
-      </div>
-      <div class="p-4 space-y-3">
-         <div class="grid grid-cols-2 gap-3">
-            <div class="space-y-1">
-               <label class="text-[10px] font-bold text-slate-400 uppercase ml-1">Exam ID</label>
-               <input type="text" id="_api_examId" placeholder="Filter" class="input-clean w-full px-2.5 py-1.5 rounded-md">
-            </div>
-            <div class="space-y-1">
-               <label class="text-[10px] font-bold text-slate-400 uppercase ml-1">Group ID</label>
-               <input type="text" id="_api_examGroupId" placeholder="Filter" class="input-clean w-full px-2.5 py-1.5 rounded-md">
-            </div>
-         </div>
-         <div class="space-y-1">
-            <label class="text-[10px] font-bold text-slate-400 uppercase ml-1">Details Context (CSV)</label>
-            <input type="text" id="_api_examDetailsId" placeholder="e.g. 101, 102" class="input-clean w-full px-2.5 py-1.5 rounded-md">
-         </div>
-         <button onclick="test_api()" class="w-full py-2 mt-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md text-[11px] font-bold shadow-md shadow-indigo-600/10">
-            Fetch Archive
-         </button>
-      </div>
-    </div>
 
-    <!-- Results Table -->
-    <div class="lg:col-span-9 card-premium flex flex-col h-[320px] overflow-hidden">
-        <div class="px-4 py-2.5 bg-slate-50 border-b border-slate-100 flex justify-between items-center">
-           <h2 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Data Store Explorer</h2>
-           <span id="result-status" class="text-[9px] font-bold bg-white text-slate-400 px-2 py-0.5 border border-slate-200 rounded">Ready</span>
-        </div>
-        <div class="flex-1 overflow-y-auto custom-scrollbar" id="api_results_container">
-            <div class="h-full flex items-center justify-center text-slate-300">
-               <span class="text-[11px] font-medium italic">Execute request to view records</span>
-            </div>
-        </div>
-    </div>
-
-  </div>
 
   <!-- Row 3: Live Monitoring Chart -->
   <div class="card-premium p-6 overflow-hidden">
@@ -216,7 +170,7 @@
       <h2 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Real-time Resource Monitor</h2>
       <div class="flex gap-4">
         <div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-indigo-500"></span><span class="text-[10px] text-slate-400 font-bold uppercase">Queue</span></div>
-        <div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500"></span><span class="text-[10px] text-slate-400 font-bold uppercase">Pool</span></div>
+
         <div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-amber-500"></span><span class="text-[10px] text-slate-400 font-bold uppercase">CPU %</span></div>
         <div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-rose-500"></span><span class="text-[10px] text-slate-400 font-bold uppercase">Mem</span></div>
       </div>
@@ -262,7 +216,7 @@
           labels: Array(MAX_DATA_POINTS).fill(''),
           datasets: [
               { label: 'Queue', borderColor: '#4f46e5', backgroundColor: 'rgba(79, 70, 229, 0.1)', data: Array(MAX_DATA_POINTS).fill(0), borderWidth: 2, tension: 0, pointRadius: 0, fill: true },
-              { label: 'Pool', borderColor: '#10b981', backgroundColor: 'transparent', data: Array(MAX_DATA_POINTS).fill(0), borderWidth: 2, tension: 0, pointRadius: 0 },
+
               { label: 'CPU %', borderColor: '#f59e0b', backgroundColor: 'transparent', data: Array(MAX_DATA_POINTS).fill(0), borderWidth: 2, tension: 0, pointRadius: 0 },
               { label: 'Memory', borderColor: '#e11d48', backgroundColor: 'transparent', data: Array(MAX_DATA_POINTS).fill(0), borderWidth: 2, tension: 0.4, pointRadius: 0 }
           ]
@@ -321,7 +275,7 @@
           // Update Numbers
           document.getElementById('stat-sockets').innerText = data.sockets.connected;
           document.getElementById('stat-queue').innerText = data.queue.bufferSize;
-          document.getElementById('stat-db').innerText = data.database.openConnections;
+
           document.getElementById('stat-cpu').innerText = data.cpu.percentage + '%';
           document.getElementById('stat-tps').innerText = (data.queue.tps || 0) + '/s';
           document.getElementById('stat-traffic').innerText = (data.queue.totalSaves || 0).toLocaleString();
@@ -330,7 +284,7 @@
           // Update Chart
           statsChart.data.labels.push(now);
           statsChart.data.datasets[0].data.push(data.queue.bufferSize);
-          statsChart.data.datasets[1].data.push(data.database.openConnections);
+
           statsChart.data.datasets[2].data.push(data.cpu.percentage);
           statsChart.data.datasets[3].data.push(data.memory.rss);
           
@@ -371,86 +325,6 @@
     handle_log(`Emit Answer [Q${payload.questionId}]`, "out");
   }
 
-  // API Client
-  window.test_api = async function() {
-      const studentId = document.getElementById("_studentId").value;
-      const hostname = document.getElementById("_api_hostname").value;
-      const examId = document.getElementById("_api_examId").value;
-      const examGroupId = document.getElementById("_api_examGroupId").value;
-      const examDetailsRaw = document.getElementById("_api_examDetailsId").value;
-      
-      const payload = { hostname, examId, examGroupId };
-      if (examDetailsRaw) payload.examDetailsId = examDetailsRaw.split(',').map(s => s.trim());
 
-      handle_log(`POST /answers/${studentId}`, "out");
-      
-      const resultsContainer = document.getElementById('api_results_container');
-      const statusLabel = document.getElementById('result-status');
-      
-      resultsContainer.style.opacity = '0.5';
-      statusLabel.innerText = "Processing...";
-
-      try {
-          const res = await fetch(`/answers/${studentId}`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(payload)
-          });
-          
-          const records = await res.json();
-          resultsContainer.style.opacity = '1';
-
-          if (res.ok) {
-              const count = records.length;
-              handle_log(`HTTP SUCCESS: Received ${count} records`, "in");
-              statusLabel.innerText = `${count} Records Found`;
-              
-              if (count === 0) {
-                 resultsContainer.innerHTML = `<div class="h-full flex items-center justify-center text-slate-400 text-xs">No records available for these filters.</div>`;
-                 return;
-              }
-
-              let html = `
-                <table class="w-full text-left">
-                  <thead class="sticky top-0 bg-white border-b border-slate-100 shadow-sm z-10">
-                    <tr>
-                      <th class="p-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Question</th>
-                      <th class="p-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Value</th>
-                      <th class="p-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Context (Exam/Grp/Details)</th>
-                    </tr>
-                  </thead>
-                  <tbody class="divide-y divide-slate-50">`;
-              
-              records.forEach(r => {
-                  html += `
-                    <tr class="hover:bg-slate-50/50 transition-colors">
-                      <td class="px-4 py-2 text-xs font-bold text-slate-900 leading-none">Q${r.questionId}</td>
-                      <td class="px-4 py-2">
-                         <span class="inline-block px-1.5 py-0.5 bg-indigo-50 text-indigo-700 rounded font-bold text-[11px]">${r.answer}</span>
-                      </td>
-                      <td class="px-4 py-2">
-                         <div class="text-[10px] text-slate-500 font-mono truncate max-w-[280px]" title="E: ${r.examId} / G: ${r.examGroupId} / ED: ${r.examDetailsId}">
-                            E: ${r.examId} / G: ${r.examGroupId} / ED: ${r.examDetailsId}
-                         </div>
-                      </td>
-                    </tr>
-                  `;
-              });
-              
-              html += `</tbody></table>`;
-              resultsContainer.innerHTML = html;
-
-          } else {
-              handle_log(`HTTP ERROR: ${records.error}`, "sys");
-              statusLabel.innerText = "Error";
-              resultsContainer.innerHTML = `<div class="p-6 text-rose-500 text-xs font-medium bg-rose-50 m-4 rounded-lg">${records.error}</div>`;
-          }
-      } catch (e) {
-          resultsContainer.style.opacity = '1';
-          handle_log(`Network Failure`, "sys");
-          statusLabel.innerText = "Offline";
-          resultsContainer.innerHTML = `<div class="p-6 text-rose-500 text-xs font-medium m-4">${e}</div>`;
-      }
-  }
 </script>
 {% endblock %}
