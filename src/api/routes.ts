@@ -1,12 +1,11 @@
 import { Router, Request, Response } from 'express';
+import { StudentRequest } from '../types';
 import config from '../config/env';
 import { getAnswers, getAnswersByExam, getDbStats } from '../database/manager';
 import { logger } from '../utils/logger';
 import fs from 'fs';
 import { io } from '../socket';
-
-
-
+import { submissionService } from '../services/submission.service';
 
 const router = Router();
 
@@ -95,10 +94,55 @@ router.post('/answers/student/:sId', (req: Request, res: Response) => {
     }
 });
 
+router.post('/submissions/bulk', (req: Request, res: Response) => {
+    const { hostname, answers } = req.body;
+
+    // Basic Validation
+    if (!hostname) {
+        res.status(400).json({ error: 'Hostname required' });
+        return;
+    }
+
+    if (!Array.isArray(answers) || answers.length === 0) {
+        res.status(400).json({ error: 'Answers array required' });
+        return;
+    }
+
+    const answerPath = config.ANSWER_PATH.replace('{domain}', hostname);
+
+    if (!fs.existsSync(answerPath)) {
+        res.status(404).json({ error: 'Domain storage not found' });
+        return;
+    }
+
+    try {
+        let queuedCount = 0;
+        for (const answer of answers as StudentRequest[]) {
+            // Inject Context
+            answer.answer_path = answerPath;
+            answer.domain = hostname;
+            
+            // Basic validation for individual answer
+            if (answer.sId && answer.qId && answer.ans) {
+                submissionService.enqueue(answer);
+                queuedCount++;
+            }
+        }
+        
+        res.json({ 
+            message: 'Answers queued successfully', 
+            count: queuedCount 
+        });
+    } catch (e) {
+        logger.error(`API Error processing bulk submission: ${e}`);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
 router.get('/stats', (req, res) => {
     try {
         const dbStats = getDbStats();
-        const queueStats = require('../services/submission.service').submissionService.getQueueStats();
+        const queueStats = submissionService.getQueueStats();
         const memUsage = process.memoryUsage();
         const cpuUsage = process.cpuUsage();
 
