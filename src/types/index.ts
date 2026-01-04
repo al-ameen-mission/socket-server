@@ -1,11 +1,11 @@
 export interface StudentRequest {
-    exam_group_id: string | number;
-    historyId: string | number;
-    studentId: string | number;
-    questionId: string | number;
-    answer: string;
-    examId: string | number;
-    examdetailsId: string | number;
+    egId: string | number;
+    hId: string | number;
+    sId: string | number;
+    qId: string | number;
+    ans: string;
+    eId: string | number;
+    edId: string | number;
     endtimestamp?: number;
     
     // Context injected by controller

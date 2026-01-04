@@ -65,7 +65,7 @@ class SubmissionService {
             100, 
             500, 
             this.processBatch.bind(this),
-            (req) => `${req.studentId}_${req.questionId}` // Key for deduplication
+            (req) => `${req.sId}_${req.qId}` // Key for deduplication
         );
 
         // TPS Calculation every 2 seconds
@@ -105,12 +105,12 @@ class SubmissionService {
         // Write to DBs
         for (const [folderPath, requests] of domainGroups) {
             const records: AnswerRecord[] = requests.map(r => ({
-                sId: r.studentId,
-                qId: r.questionId,
-                eId: r.examId,
-                edId: r.examdetailsId,
-                egId: r.exam_group_id,
-                answer: r.answer
+                sId: r.sId,
+                qId: r.qId,
+                eId: r.eId,
+                edId: r.edId,
+                egId: r.egId,
+                answer: r.ans
             }));
 
             try {

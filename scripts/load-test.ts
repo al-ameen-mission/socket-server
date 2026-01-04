@@ -19,13 +19,13 @@ function spawnUser(id: number) {
         
         setInterval(() => {
             const payload = {
-                examId: '1',
-                exam_group_id: '1',
-                examdetailsId: '1',
-                studentId: id.toString(),
-                questionId: Math.floor(Math.random() * 50) + 1,
-                historyId: '1',
-                answer: ANSWERS[Math.floor(Math.random() * ANSWERS.length)]
+                eId: '1',
+                egId: '1',
+                edId: '1',
+                sId: id.toString(),
+                qId: Math.floor(Math.random() * 50) + 1,
+                hId: '1',
+                ans: ANSWERS[Math.floor(Math.random() * ANSWERS.length)]
             };
             
             socket.emit('answer_by_student', payload);
