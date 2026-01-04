@@ -91,10 +91,7 @@
                <span class="text-[9px] font-bold text-slate-400 uppercase block">Throughput</span>
                <span class="text-[11px] font-mono text-cyan-600 font-bold" id="stat-tps">0/s</span>
             </div>
-            <div class="text-center">
-               <span class="text-[9px] font-bold text-slate-400 uppercase block">Traffic</span>
-               <span class="text-[11px] font-mono text-cyan-600 font-bold" id="stat-traffic">0</span>
-            </div>
+
             <div class="text-center">
                <span class="text-[9px] font-bold text-slate-400 uppercase block">Memory</span>
               <span class="text-[11px] font-mono text-rose-600 font-bold" id="stat-mem">0</span>
@@ -107,7 +104,7 @@
   <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
     
     <!-- Socket Form -->
-    <div class="lg:col-span-3 card-premium overflow-hidden">
+    <div class="lg:col-span-3 card-premium overflow-hidden h-full">
       <div class="px-4 py-2.5 bg-slate-50 border-b border-slate-100 flex items-center justify-between">
         <h2 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Socket Emitter</h2>
         <span class="text-[9px] bg-emerald-100 text-emerald-700 font-bold px-2 py-0.5 rounded">Real-time</span>
@@ -150,7 +147,7 @@
     </div>
 
     <!-- Live Logs -->
-    <div class="lg:col-span-9 card-premium flex flex-col h-[280px] overflow-hidden">
+    <div class="lg:col-span-9 card-premium flex flex-col h-[280px] overflow-hidden h-full">
       <div class="px-4 py-2 bg-slate-50 border-b border-slate-100 flex items-center justify-between">
          <h2 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest text-[#000]">Socket Stream</h2>
          <button onclick="document.getElementById('console_log').innerHTML=''" class="text-[9px] font-bold text-slate-300 hover:text-slate-500">CLEAR</button>
@@ -278,7 +275,7 @@
 
           document.getElementById('stat-cpu').innerText = data.cpu.percentage + '%';
           document.getElementById('stat-tps').innerText = (data.queue.tps || 0) + '/s';
-          document.getElementById('stat-traffic').innerText = (data.queue.totalSaves || 0).toLocaleString();
+
           document.getElementById('stat-mem').innerText = data.memory.rss + 'M';
 
           // Update Chart
