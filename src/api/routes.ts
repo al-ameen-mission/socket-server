@@ -94,6 +94,7 @@ router.post('/answers/student/:sId', (req: Request, res: Response) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
 router.get('/stats', (req, res) => {
     try {
         const dbStats = getDbStats();
