@@ -1,8 +1,7 @@
-import { Router, Request, Response } from 'express';
+import { Router } from 'express';
 import config from '../config/env';
 
 import { logger } from '../utils/logger';
-import fs from 'fs';
 import { io } from '../socket';
 
 

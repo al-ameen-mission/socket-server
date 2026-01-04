@@ -2,13 +2,9 @@ import path from 'path';
 import fs from 'fs';
 import { logger } from '../utils/logger';
 
-// --- Interfaces ---
 export interface AnswerRecord {
   studentId: string | number;
   questionId: string | number;
-  examId: string | number;         
-  examDetailsId: string | number;  
-  examGroupId: string | number;    
   answer: string;
 }
 
