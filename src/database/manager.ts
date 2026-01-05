@@ -18,6 +18,7 @@ interface DbConnection {
     db: Database.Database;
     stmts: {
         upsert?: Database.Statement;
+        del?: Database.Statement;
     };
 }
 
@@ -80,6 +81,9 @@ const initializeDb = (folderPath: string): DbInstance => {
             upsert: writerDb.prepare(`
                 INSERT OR REPLACE INTO answers (s_id, q_id, e_id, ed_id, eg_id, answer, updated_at)
                 VALUES (@sId, @qId, @eId, @edId, @egId, @answer, @timestamp)
+            `),
+            del: writerDb.prepare(`
+                DELETE FROM answers WHERE s_id = @sId AND q_id = @qId
             `)
         }
     };
@@ -117,15 +121,22 @@ export const upsertBatch = (folderPath: string, records: AnswerRecord[]) => {
     const insertFn = db.transaction((answers: AnswerRecord[]) => {
         const timestamp = Date.now();
         for (const r of answers) {
-            stmts.upsert!.run({
-                sId: String(r.sId),
-                qId: String(r.qId),
-                eId: String(r.eId),
-                edId: String(r.edId),
-                egId: String(r.egId),
-                answer: r.answer,
-                timestamp
-            });
+            if (!r.answer || r.answer.trim() === '') {
+                stmts.del!.run({
+                    sId: String(r.sId),
+                    qId: String(r.qId)
+                });
+            } else {
+                stmts.upsert!.run({
+                    sId: String(r.sId),
+                    qId: String(r.qId),
+                    eId: String(r.eId),
+                    edId: String(r.edId),
+                    egId: String(r.egId),
+                    answer: r.answer,
+                    timestamp
+                });
+            }
         }
     });
 
